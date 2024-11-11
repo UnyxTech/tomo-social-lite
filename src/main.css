@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "animate.css";
+
+
+@media (min-width: 768px) {
+  .tomo-social * ::-webkit-scrollbar{
+    width: 6px;
+  }
+
+  .tomo-social * ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+
+  /* Handle */
+  .tomo-social * ::-webkit-scrollbar-thumb {
+    background: #D9D9D9d9;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  .tomo-social * ::-webkit-scrollbar-thumb:hover {
+    background: #D9D9D9;
+  }
+
+  /* Handle */
+  .tm-dark .tomo-social * ::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  .tm-dark .tomo-social * ::-webkit-scrollbar-thumb:hover {
+    background: #444444;
+  }
+}
+
+
+
+.tomo-social, .tomo-social *{
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+
+}
+
+.tomo-social div,
+.tomo-social span,
+.tomo-social applet,
+.tomo-social object,
+.tomo-social iframe,
+.tomo-social h1,
+.tomo-social h2,
+.tomo-social h3,
+.tomo-social h4,
+.tomo-social h5,
+.tomo-social h6,
+.tomo-social p,
+.tomo-social blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  border-style: solid;
+  box-sizing: border-box;
+  font-family: 'Poppins';
+}
+.tomo-social input{
+  font-family: 'Poppins';
+}
+.tomo-social button{
+  border-style: solid;
+  font-family: 'Poppins';
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* ::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  display: none;
+} */
+
+input[type="number"].noStep::-webkit-inner-spin-button,
+input[type="number"].noStep::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
