@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "tsc && vite build"
   },
   "dependencies": {
     "@tomo-inc/tomo-wallet-provider": "^1.0.22",

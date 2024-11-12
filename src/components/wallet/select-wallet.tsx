@@ -50,7 +50,7 @@ function MultiWalletConnect() {
   const selectCount = tomoSetting.chainTypes?.filter((chainType) => {
     return !!walletState[chainType].walletId
   }).length
-  const [selectTab, setSelectTab] = React.useState('')
+  const [selectTab, setSelectTab] = React.useState<ChainType | ''>('')
 
   const clickConnect = async () => {
     const result = await pageService.open(<BtcConnectConfirm />, {
@@ -63,11 +63,11 @@ function MultiWalletConnect() {
     loadingFn(async () => {
       try {
         await walletConnect.connect(
-          tomoSetting.chainTypes.map((chainType) => {
-            return walletState[chainType].walletId
+          tomoSetting.chainTypes!.map((chainType) => {
+            return walletState[chainType].walletId!
           })
         )
-      } catch (e) {
+      } catch (e: any) {
         console.log('error', e)
         toast.error(e?.message || 'Failed')
       }
@@ -278,7 +278,7 @@ export function SelectWalletChildren(props: {
     loadingFn(async () => {
       try {
         await walletConnect.connect([wallet.id])
-      } catch (e) {
+      } catch (e: any) {
         toast.error(e?.message || 'Failed')
       }
     })
@@ -407,7 +407,7 @@ function ChainTypeWalletSelectItem({
   const [walletState, setWalletState] = useAtom(walletStateAtom)
   const tomoSetting = useAtomValue(tomoProviderSettingAtom)
   const tomoStyleOption = useAtomValue(tomoStyleOptionAtom)
-  const walletId = walletState[chainType].walletId
+  const walletId = walletState[chainType].walletId!
   const wallet = getWalletById(walletId, tomoSetting)
   const option = tomoSetting.chainOption?.[chainType]
   return (

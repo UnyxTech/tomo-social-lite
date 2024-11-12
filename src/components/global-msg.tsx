@@ -23,7 +23,7 @@ const iconMap = {
   success: <SuccessIcon className={'tm-size-4 tm-text-success'} />,
   error: <ErrorIcon className={'tm-size-4 tm-text-danger'} />,
   warning: <WaringIcon className={'tm-size-4 tm-text-warning'} />
-} as Record<Msg['type'], any>
+} as Record<string, any>
 
 function MsgItem({ msg }: { msg: MsgState }) {
   const [startTiming, setStartTiming] = useState(true)
@@ -54,7 +54,7 @@ function MsgItem({ msg }: { msg: MsgState }) {
           '0 6px 16px 0 rgba(0, 0, 0, 0.08),0 3px 6px -4px rgba(0, 0, 0, 0.12),0 9px 28px 8px rgba(0, 0, 0, 0.05)'
       }}
     >
-      {iconMap[msg.type]}
+      {iconMap[msg.type || '']}
       <div className={'tm-flex-1 tm-overflow-hidden'}>{msg.title}</div>
     </div>
   )

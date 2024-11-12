@@ -12,7 +12,6 @@ import classNames from 'classnames'
 import { LoadingSpin } from '../../hooks/useLoading'
 import SelectWallet from './select-wallet'
 import { GlobalMsg } from '../global-msg'
-import { TomoSocialConnect } from './tomo-social-connect'
 
 export function TomoSocial({
   className,
@@ -24,8 +23,8 @@ export function TomoSocial({
   const pages = useAtomValue(pagesAtom)
   const pageService = usePageService()
   const pageCount = pages.filter((item) => item.type === 'page').length
-  const indexDomRef = useRef()
-  const indexContainerDomRef = useRef()
+  const indexDomRef = useRef<HTMLDivElement>(null)
+  const indexContainerDomRef = useRef<HTMLDivElement>(null)
   const [indexHeight, setIndexHeight] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
   useEffect(() => {
@@ -35,7 +34,7 @@ export function TomoSocial({
         setIndexHeight(entry.contentRect.height)
       }
     })
-    resizeObserver.observe(indexDomRef.current)
+    resizeObserver.observe(indexDomRef.current!)
 
     const resizeObserverContainer = new ResizeObserver((entries) => {
       const entry = entries[0]
@@ -43,11 +42,12 @@ export function TomoSocial({
         setContainerWidth(entry.contentRect.width)
       }
     })
-    resizeObserverContainer.observe(indexContainerDomRef.current)
+    resizeObserverContainer.observe(indexContainerDomRef.current!)
   }, [])
   const pageList = pages.filter((item) => item.type === 'page')
   const curPageId = pageList[pageList.length - 1]?.id || 0
   const drawerList = pages.filter((item) => item.type === 'drawer')
+
   return (
     <div
       className={classNames(

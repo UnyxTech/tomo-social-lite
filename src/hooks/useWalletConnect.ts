@@ -15,18 +15,15 @@ import {
 } from '../state'
 import { useCallback, useEffect } from 'react'
 import { useAtomCallback } from 'jotai/utils'
-import {
-  CosmosProvider,
-  TomoChain,
-  WalletProvider
-} from '@tomo-inc/tomo-wallet-provider'
-import { DefaultChainOption } from '../config/chain-base'
+import { CosmosProvider, WalletProvider } from '@tomo-inc/tomo-wallet-provider'
+import { DefaultChainOption, TomoChain } from '../config/chain-base'
 import update from 'immutability-helper'
 
 export function getSettingChains(
   tomoSetting: TomoProviderSetting,
   chainType: ChainType
 ) {
+  // @ts-ignore
   return tomoSetting[chainType + 'Chains'] as TomoChain[]
 }
 
@@ -38,6 +35,7 @@ export default function useWalletConnect() {
     useCallback(async (get, set, opt: { chainType: ChainType }) => {
       const { chainType } = opt
       const clientMap = get(clientMapAtom)
+      // @ts-ignore
       const provider = clientMap[`${chainType}Provider`] as WalletProvider
       const address = await provider.getAddress()
 
@@ -59,20 +57,21 @@ export default function useWalletConnect() {
         get,
         set,
         chainType: ChainType,
-        opt?: { type?: 'connect' | 'init' } = {}
+        opt: { type?: 'connect' | 'init' } = {}
       ) => {
         const { type = 'connect' } = opt
         const clientMap = get(clientMapAtom)
         const tomoSetting = get(tomoProviderSettingAtom)
 
         try {
+          // @ts-ignore
           const provider = clientMap[`${chainType}Provider`] as WalletProvider
           if (!provider) {
             throw new Error(`Unsupported Chain: ${chainType}`)
           }
           try {
             await provider.connectWallet()
-          } catch (e) {
+          } catch (e: any) {
             // cosmos chain not found
             if (
               chainType !== 'cosmos' ||
@@ -80,7 +79,7 @@ export default function useWalletConnect() {
             ) {
               throw e
             }
-            const data = tomoSetting.cosmosChains[0].modularData
+            const data = tomoSetting.cosmosChains![0].modularData
             if (!data) {
               throw e
             }
@@ -92,8 +91,9 @@ export default function useWalletConnect() {
 
           const network = await provider.getNetwork()
 
+          // @ts-ignore
           let chain = tomoSetting[`${chainType}Chains`].find(
-            (item) => item.network === network
+            (item: TomoChain) => item.network === network
           )
           // no support chain
           if (!chain) {
@@ -101,13 +101,13 @@ export default function useWalletConnect() {
             if (!chainList?.length) {
               throw new Error('Unsupported network')
             }
-            chain = chainList[0]
+            chain = chainList[0]! as TomoChain
             await switchChain(chain)
             return
           }
 
           await reloadAddress({ chainType: chainType })
-          setWalletState((prev) => {
+          setWalletState((prev: WalletState) => {
             return update(prev, {
               [chainType]: {
                 $merge: {
@@ -128,23 +128,21 @@ export default function useWalletConnect() {
 
   const switchChain = useAtomCallback(
     useCallback(async (get, set, chain: TomoChain) => {
-      const walletState = get(walletStateAtom)
       const clientMap = get(clientMapAtom)
-      // if (walletState.chainType !== chain.type) {
-      //   await switchChainType(chain.type)
-      // }
-      const newWalletState = {} as WalletState
+      // @ts-ignore
       const provider = clientMap[`${chain.type}Provider`] as WalletProvider
-      if (!provider) {
-        throw new Error(`chain type error: ${chain.type}`)
+      // @ts-ignore
+      if (!provider || !provider.switchNetwork) {
+        throw new Error(`switchNetwork error: ${chain.type}`)
       }
 
+      // @ts-ignore
       await provider.switchNetwork(chain.network)
 
       const address = await provider?.getAddress()
       const network = await provider?.getNetwork()
 
-      setWalletState((prev) => {
+      setWalletState((prev: WalletState) => {
         return update(prev, {
           [chain.type]: {
             $merge: {
@@ -168,8 +166,10 @@ export default function useWalletConnect() {
         throw new Error('Wallet does not exist')
       }
 
+      // @ts-ignore
       const provider = (newClientMap[`${wallet.chainType}Provider`] =
         new wallet.connectProvider(
+          // @ts-ignore
           tomoProviderSetting[`${wallet.chainType}Chains`]
         ))
 
@@ -197,12 +197,12 @@ export default function useWalletConnect() {
     connect: useAtomCallback(
       useCallback(async (get, set, walletIds: string[]) => {
         const tomoSetting = get(tomoProviderSettingAtom)
-        for (let walletId of walletIds) {
+        for (const walletId of walletIds) {
           const wallet = getWalletById(walletId, tomoSetting)
           if (!wallet) {
             throw new Error('Wallet does not exist')
           }
-          setWalletState((prev) => {
+          setWalletState((prev: WalletState) => {
             return update(prev, {
               [wallet.chainType]: {
                 $merge: {
@@ -213,7 +213,7 @@ export default function useWalletConnect() {
           })
           initProvider(walletId)
           await switchChainType(wallet.chainType)
-          setWalletState((prev) => {
+          setWalletState((prev: WalletState) => {
             return update(prev, {
               [wallet.chainType]: {
                 $merge: {
@@ -223,7 +223,8 @@ export default function useWalletConnect() {
             })
           })
         }
-        setWalletState((prev) => {
+        // @ts-ignore
+        setWalletState((prev: WalletState) => {
           return {
             ...prev,
             isConnected: true
@@ -270,7 +271,7 @@ function initWalletState(
   tomoSetting: TomoProviderSetting
 ) {
   let newState = walletSate
-  tomoSetting.chainTypes.forEach((type) => {
+  tomoSetting.chainTypes!.forEach((type) => {
     if (!newState[type]) {
       newState = {
         ...newState,
@@ -286,7 +287,6 @@ function initWalletState(
 
 export function useWalletConnectInit(opt: TomoProviderSetting) {
   const installWallets = useAtomValue(installWalletsAtom)
-  const [walletState, setWalletState] = useAtom(walletStateAtom)
   const [clientMap, setClientMap] = useAtom(clientMapAtom)
   const walletConnect = useWalletConnect()
   const setInstallWallet = useSetAtom(installWalletsAtom)
@@ -297,14 +297,16 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
   const initConnectState = useAtomCallback(
     useCallback(async (get, set) => {
       // save opt
-      let tomoSetting = {
+      const tomoSetting = {
         ...get(tomoProviderSettingAtom),
         ...opt,
         chainOption: { ...DefaultChainOption, ...opt.chainOption }
       } as TomoProviderSetting
 
       chainTypeList.forEach((type) => {
+        // @ts-ignore
         tomoSetting[`${type}Chains`] = initSettingChains(
+          // @ts-ignore
           tomoSetting[`${type}Chains`]
         )
       })
@@ -322,8 +324,11 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           const wallet = getWalletById(walletId, tomoSetting)
           if (wallet) {
             try {
+              // @ts-ignore
               new wallet.connectProvider(tomoSetting[`${chainType}Chains`])
-            } catch (e) {}
+            } catch (e) {
+              /* empty */
+            }
           }
         }
       })
@@ -336,10 +341,10 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           ) {
             throw new Error(`chain not connected`)
           }
-          const connectChainTypes = tomoSetting.chainTypes
+          const connectChainTypes = tomoSetting.chainTypes!
 
-          for (let type of connectChainTypes) {
-            const walletId = walletState[type].walletId
+          for (const type of connectChainTypes) {
+            const walletId = walletState[type].walletId!
             walletConnect.initProvider(walletId)
             await walletConnect.switchChainType(type, {
               type: 'init'
@@ -347,6 +352,7 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           }
         } catch (e) {
           console.log('init connect error', e)
+          // @ts-ignore
           set(walletStateAtom, (prev) => {
             return {
               ...prev,
@@ -368,31 +374,9 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
       initConnectState()
     }
   }, [installWallets])
-  const chainChange = useCallback(
-    useAtomCallback(async (get, set, chainId: string) => {
-      const tomoSetting = get(tomoProviderSettingAtom)
-      const walletState = get(walletStateAtom)
-      chainId = Number(chainId)
 
-      const chainList = getSettingChains(tomoSetting, walletState.chainType)
-      if (!chainList?.length) {
-        await walletConnect.disconnect()
-        return
-      }
-      let chain = chainList.find((c) => c.id === chainId)
-      if (!chain) {
-        chain = chainList.find((c) => c.id === walletState.chainId)
-        if (!chain) {
-          chain = chainList[0]
-        }
-      }
-      // console.log('chainChanged', chain)
-      await walletConnect.switchChain(chain)
-    }),
-    []
-  )
   useEffect(() => {
-    const accountChanged = async (...args) => {
+    const accountChanged = async () => {
       await walletConnect.reloadAddress({ chainType: 'bitcoin' })
     }
     clientMap.bitcoinProvider?.on?.('accountsChanged', accountChanged)

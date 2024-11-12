@@ -52,6 +52,7 @@ export default function useInitStyle(tomoSetting: TomoProviderSetting) {
 
   useEffect(() => {
     STYLE_MAP.rounded.sizeList.forEach(([varName, size]) => {
+      // @ts-ignore
       let scale = STYLE_MAP.rounded.scale[resultStyle?.rounded]
       if (isNaN(scale)) {
         scale = STYLE_MAP.rounded.scale.medium
@@ -65,7 +66,7 @@ export default function useInitStyle(tomoSetting: TomoProviderSetting) {
     } else {
       document.documentElement.classList.remove('tm-dark')
     }
-    setTomoStyleOption({ theme: resultStyle?.theme })
+    setTomoStyleOption({ theme: resultStyle?.theme === 'dark' ? 'dark' : 'light' })
   }, [resultStyle?.theme])
 
   useEffect(() => {
@@ -79,11 +80,11 @@ export default function useInitStyle(tomoSetting: TomoProviderSetting) {
     )
     document.documentElement.style.setProperty(
       '--tms-colors-primary',
-      hexToRgb(isDefault ? '#121212' : resultStyle?.primaryColor)
+      hexToRgb(isDefault ? '#121212' : resultStyle!.primaryColor!)
     )
     document.documentElement.style.setProperty(
       '--tms-colors-primary-dark',
-      isDefault ? '#ffffffe9' : resultStyle?.primaryColor
+      isDefault ? '#ffffffe9' : resultStyle!.primaryColor!
     )
   }, [resultStyle?.primaryColor])
 }

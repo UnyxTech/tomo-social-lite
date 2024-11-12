@@ -130,7 +130,10 @@ export function ChildComponent(props: ChildProps) {
   const tomoWalletConnect = useTomoWalletConnect()
 
   const signCosmos = async (address: string, amount: string) => {
-    const selfAddress = await providers.cosmosProvider?.getAddress()
+    if(!providers.cosmosProvider){
+      throw new Error('cosmosProvider not found')
+    }
+    const selfAddress = await providers.cosmosProvider.getAddress()
     const rpcUrl = 'https://cosmoshub.validator.network:443'
     const client = await SigningStargateClient.connectWithSigner(
       rpcUrl,
@@ -350,8 +353,10 @@ function StyleSetting({ style, setStyle }: ChildProps) {
         <select
           value={style?.rounded}
           onChange={(e) => {
+
             setStyle({
               ...style,
+              // @ts-ignore
               rounded: e.target.value
             })
           }}
@@ -426,14 +431,16 @@ function LodingButton({
       className={'tm-border tm-border-tc1 tm-px-1.5'}
       disabled={loading || disabled}
       onClick={async () => {
+        // @ts-ignore
         await loadingFn(onClick)
       }}
     />
   )
 }
 
-const ShowJson = React.memo(function ShowJson({ title, obj, rows = 10 }) {
-  const jsonFn = function jsonValueFn(key, value) {
+const ShowJson = React.memo(function ShowJson({ title, obj, rows = 10 }: {title: any, obj: any, rows?: number}) {
+  const jsonFn = function jsonValueFn(key: any, value: any) {
+    // @ts-ignore
     if (key && this !== obj) {
       if (typeof value === 'object' || typeof value === 'function') {
         if (Array.isArray(value)) {

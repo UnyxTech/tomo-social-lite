@@ -1,4 +1,4 @@
-import { atom } from 'jotai'
+import { atom, PrimitiveAtom } from 'jotai'
 import { bitcoinChains, cosmosChains } from '../config/chains'
 
 // global buffer init
@@ -20,23 +20,34 @@ if (typeof window !== 'undefined') {
 export const INIT_ARRAY_STATE = []
 export const INIT_OBJECT_STATE = {}
 
-function createPersistenceAtom<T>(name: string, defaultValue: T) {
+type WithInitialValue<Value> = {
+  init: Value
+}
+
+function createPersistenceAtom<Value>(
+  name: string,
+  defaultValue: Value
+): PrimitiveAtom<Value> & WithInitialValue<Value> {
   if (typeof window === 'undefined') {
     return atom(defaultValue)
   }
   const data = localStorage.getItem(name)
   const flag = data === 'undefined' || data === null
-  const tempAtom = atom<T>(flag ? defaultValue : JSON.parse(data as string))
+  const tempAtom = atom<Value>(
+    flag ? defaultValue : (JSON.parse(data as string) as Value)
+  )
 
-  return atom<T, T, T>(
+  // @ts-ignore
+  return atom(
     (get) => get(tempAtom),
-    (get, set, newObj) => {
+    (get, set, newObj: Value) => {
       let newValue = newObj
       if (typeof newObj === 'function') {
         newValue = newObj(get(tempAtom))
       }
-      set(tempAtom, newValue)
       localStorage.setItem(name, JSON.stringify(newValue))
+      set(tempAtom, newValue)
+      return newValue
     }
   )
 }
@@ -48,7 +59,7 @@ export const chainTypeList = [
   // 'solana',
   // 'ton',
   // 'tron'
-] as const
+]
 export type ChainType = (typeof chainTypeList)[number]
 
 type ConnectInfo = {
@@ -158,7 +169,7 @@ export const tomoProviderSettingAtom =
 export const tomoSDKAtom = atom<any | undefined>(undefined)
 
 export type TomoModalState = {
-  open: false
+  open: boolean
   type?: 'default' | 'connect'
   resolve?: (value: ModalResult | undefined) => void
 }

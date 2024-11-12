@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Button from '../Button'
 import Checkbox from '../checkbox'
 import { useAtomValue } from 'jotai/index'
-import { tomoProviderSettingAtom } from '../../state'
+import { TomoProviderSetting, tomoProviderSettingAtom } from '../../state'
 import classNames from 'classnames'
 
 export default function BtcConnectConfirm() {
@@ -62,8 +62,8 @@ export default function BtcConnectConfirm() {
         </>
       )
     }
-  ]
-  const curHints = tomoSetting.connectionHints || defaultConfirms
+  ] as TomoProviderSetting['connectionHints']
+  const curHints = tomoSetting.connectionHints || defaultConfirms!
   const [hintChecks, setHintChecks] = useState(
     curHints.map((hint) => !hint.isRequired)
   )
