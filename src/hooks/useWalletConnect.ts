@@ -223,13 +223,19 @@ export default function useWalletConnect() {
             })
           })
         }
-        // @ts-ignore
-        setWalletState((prev: WalletState) => {
-          return {
-            ...prev,
-            isConnected: true
-          }
-        })
+        const walletState = get(walletStateAtom)
+        if (
+          tomoSetting.chainTypes?.every((type) => {
+            return walletState[type].connected
+          })
+        ) {
+          setWalletState((prev: WalletState) => {
+            return {
+              ...prev,
+              isConnected: true
+            }
+          })
+        }
       }, [])
     )
   }
@@ -316,6 +322,24 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
 
       set(tomoProviderSettingAtom, tomoSetting)
 
+      const resetLogout = () => {
+        set(walletStateAtom, (prev) => {
+          tomoSetting.chainTypes?.forEach((type) => {
+            prev = update(prev, {
+              [type]: {
+                connected: {
+                  $set: false
+                }
+              }
+            })
+          })
+          return {
+            ...prev,
+            isConnected: false
+          }
+        })
+      }
+
       // init wallet state
       const walletState = get(walletStateAtom)
       tomoSetting.chainTypes?.forEach((chainType) => {
@@ -352,14 +376,16 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           }
         } catch (e) {
           console.log('init connect error', e)
-          // @ts-ignore
           set(walletStateAtom, (prev) => {
             return {
               ...prev,
               isConnected: false
             }
           })
+          resetLogout()
         }
+      } else {
+        resetLogout()
       }
       set(clientMapAtom, (prev) => {
         return {

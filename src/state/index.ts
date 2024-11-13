@@ -59,7 +59,7 @@ export const chainTypeList = [
   // 'solana',
   // 'ton',
   // 'tron'
-]
+] as const
 export type ChainType = (typeof chainTypeList)[number]
 
 type ConnectInfo = {
@@ -155,7 +155,8 @@ export type TomoProviderSetting = {
 export const INIT_TOMO_SETTING = {
   bitcoinChains: bitcoinChains,
   cosmosChains: cosmosChains,
-  chainTypes: chainTypeList,
+  // @ts-ignore
+  chainTypes: chainTypeList as ChainType[],
   socialTypes: [],
   indexWallets: indexWalletIds,
   onlySocial: false,
@@ -170,12 +171,12 @@ export const tomoSDKAtom = atom<any | undefined>(undefined)
 
 export type TomoModalState = {
   open: boolean
-  type?: 'default' | 'connect'
   resolve?: (value: ModalResult | undefined) => void
+  chainType: ChainType
 }
 export const tomoModalAtom = atom<TomoModalState>({
   open: false,
-  type: 'default'
+  chainType: 'bitcoin'
 })
 
 export type Msg = {

@@ -29,7 +29,7 @@ import { allWalletMap } from '../config/all-wallets'
 
 export default function Demo() {
   const [style, setStyle] = useState<TomoProviderSetting['style']>({
-    rounded: 'medium',
+    rounded: 'small',
     theme: 'light',
     primaryColor: '#FF7C2A'
   })
@@ -130,7 +130,7 @@ export function ChildComponent(props: ChildProps) {
   const tomoWalletConnect = useTomoWalletConnect()
 
   const signCosmos = async (address: string, amount: string) => {
-    if(!providers.cosmosProvider){
+    if (!providers.cosmosProvider) {
       throw new Error('cosmosProvider not found')
     }
     const selfAddress = await providers.cosmosProvider.getAddress()
@@ -168,19 +168,19 @@ export function ChildComponent(props: ChildProps) {
           <div className={'tm-flex tm-flex-wrap tm-gap-3'}>
             <LodingButton
               onClick={() => {
-                tomoModal.open()
+                tomoModal.open('cosmos')
               }}
             >
-              tomo modal
+              tomo modal - cosmos
             </LodingButton>
 
             <LodingButton
               onClick={async () => {
-                const result = await tomoModal.open('connect')
+                const result = await tomoModal.open('bitcoin')
                 console.log('modal result', result)
               }}
             >
-              tomo modal - login
+              tomo modal - bitcoin
             </LodingButton>
             <LodingButton
               onClick={async () => {
@@ -316,14 +316,14 @@ export function ChildComponent(props: ChildProps) {
         </div>
         <div
           className={
-            'tm-flex tm-h-full tm-w-full tm-flex-col tm-items-center tm-gap-4 tm-overflow-auto tm-px-4 tm-py-10 md:tm-w-auto md:tm-px-20'
+            'tm-flex tm-h-full tm-w-full tm-flex-col tm-items-center tm-gap-4 tm-overflow-auto tm-px-4 tm-py-10 md:tm-w-auto md:tm-px-6'
           }
         >
           <div>tomo social</div>
           <div>
             <LodingButton
               onClick={() => {
-                tomoModal.open('connect')
+                tomoModal.open('bitcoin')
               }}
             >
               open modal
@@ -337,7 +337,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
           </div>
 
-          <TomoSocial />
+          <TomoSocial chainType={'bitcoin'} />
         </div>
       </div>
     </div>
@@ -353,7 +353,6 @@ function StyleSetting({ style, setStyle }: ChildProps) {
         <select
           value={style?.rounded}
           onChange={(e) => {
-
             setStyle({
               ...style,
               // @ts-ignore
@@ -438,7 +437,15 @@ function LodingButton({
   )
 }
 
-const ShowJson = React.memo(function ShowJson({ title, obj, rows = 10 }: {title: any, obj: any, rows?: number}) {
+const ShowJson = React.memo(function ShowJson({
+  title,
+  obj,
+  rows = 10
+}: {
+  title: any
+  obj: any
+  rows?: number
+}) {
   const jsonFn = function jsonValueFn(key: any, value: any) {
     // @ts-ignore
     if (key && this !== obj) {

@@ -1,218 +1,30 @@
-import { usePageControl, usePageService } from '../../hooks/usePageService'
 import { BottomPoweredBy } from './bottom-powered-by'
-import {
-  getIndexWallets,
-  getWalletById,
-  TomoWallet
-} from '../../config/all-wallets'
+import { getIndexWallets, TomoWallet } from '../../config/all-wallets'
 import { useLoading, useLoadingPage } from '../../hooks/useLoading'
 import useToast from '../../hooks/useToast'
 import useWalletConnect from '../../hooks/useWalletConnect'
-import { PageHeaderMin } from './page-head'
 import React, { useMemo } from 'react'
-import { useAtom, useAtomValue } from 'jotai'
-import {
-  ChainType,
-  tomoProviderSettingAtom,
-  tomoStyleOptionAtom,
-  walletStateAtom
-} from '../../state'
-import BtcConnectConfirm from './btc-connect-confirm'
-import Button from 'components/Button'
+import { useAtomValue } from 'jotai'
+import { ChainType, tomoProviderSettingAtom } from '../../state'
 import classNames from 'classnames'
-import update from 'immutability-helper'
 
-export default function SelectWallet() {
-  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  if (!tomoSetting.chainTypes?.length) {
-    throw new Error('chainTypes is required')
-  }
-  if (tomoSetting.chainTypes?.length === 1) {
-    return (
-      <SelectWalletChildren
-        type={'connect'}
-        chainType={tomoSetting.chainTypes[0]}
-      />
-    )
-  }
-
-  return <MultiWalletConnect />
+export default function SelectWallet({ chainType }: { chainType: ChainType }) {
+  return <SelectWalletChildren type={'connect'} chainType={chainType} />
 }
 
-function MultiWalletConnect() {
-  const pageService = usePageService()
-  const [loading, loadingFn] = useLoading()
-  useLoadingPage(loading)
-  const toast = useToast()
+export function useClickWallet() {
   const walletConnect = useWalletConnect()
-  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  const walletState = useAtomValue(walletStateAtom)
-  const selectCount = tomoSetting.chainTypes?.filter((chainType) => {
-    return !!walletState[chainType].walletId
-  }).length
-  const [selectTab, setSelectTab] = React.useState<ChainType | ''>('')
-
-  const clickConnect = async () => {
-    const result = await pageService.open(<BtcConnectConfirm />, {
-      type: 'drawer'
-    })
-    if (!result) {
-      return
+  return async (wallet: TomoWallet) => {
+    try {
+      new wallet.connectProvider()
+    } catch (e) {
+      throw new Error('Wallet not installed')
     }
-
-    loadingFn(async () => {
-      try {
-        await walletConnect.connect(
-          tomoSetting.chainTypes!.map((chainType) => {
-            return walletState[chainType].walletId!
-          })
-        )
-      } catch (e: any) {
-        console.log('error', e)
-        toast.error(e?.message || 'Failed')
-      }
-    })
+    await walletConnect.connect([wallet.id])
   }
-  const isIndex = selectTab === ''
-  return (
-    <div className={'tm-relative tm-h-[618px] tm-w-full tm-overflow-hidden'}>
-      <div
-        className={
-          'tm-box-border tm-flex tm-h-full tm-w-full tm-flex-col tm-items-center tm-gap-2'
-        }
-      >
-        <PageHeaderMin showBack={!!selectTab} onClick={() => setSelectTab('')}>
-          {isIndex
-            ? 'Select your wallets'
-            : `For ${tomoSetting.chainOption?.[selectTab]?.name}`}
-        </PageHeaderMin>
-
-        <div
-          className={
-            'tm-box-border tm-w-full tm-flex-1 tm-gap-3 tm-flex tm-flex-col tm-overflow-hidden tm-pb-4'
-          }
-        >
-          <div
-            className={'tm-flex tm-flex-col tm-flex-1 tm-overflow-auto tm-px-5'}
-          >
-            {selectTab ? (
-              <MultiWalletTabList
-                chainType={selectTab}
-                back={() => setSelectTab('')}
-              />
-            ) : (
-              <div className={'tm-gap-3 tm-flex tm-flex-col tm-flex-1'}>
-                <div
-                  className={'tm-flex tm-w-full tm-flex-1 tm-flex-col tm-gap-3'}
-                >
-                  {tomoSetting.chainTypes?.map((chainType) => {
-                    return (
-                      <ChainTypeWalletSelectItem
-                        chainType={chainType}
-                        onClick={() => {
-                          setSelectTab(chainType)
-                        }}
-                        key={chainType}
-                      />
-                    )
-                  })}
-                </div>
-                <div className="tm-bg-red tm-flex tm-flex-col tm-items-center tm-justify-center tm-pt-8 tm-text-center tm-gap-4">
-                  <Button
-                    primary
-                    disabled={selectCount !== tomoSetting.chainTypes?.length}
-                    onClick={clickConnect}
-                  >
-                    Connect
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <BottomPoweredBy />
-      </div>
-    </div>
-  )
 }
 
-function MultiWalletTabList({
-  chainType,
-  back
-}: {
-  chainType: ChainType
-  back: () => void
-}) {
-  const walletList = useWalletList(chainType)
-  const [walletState, setWalletState] = useAtom(walletStateAtom)
-  const toast = useToast()
-  return (
-    <div className={'tm-flex-1 tm-overflow-hidden'}>
-      <div
-        className={'tm-flex tm-flex-col tm-h-full tm-gap-3 tm-overflow-auto'}
-      >
-        {walletList.map((wallet) => {
-          return (
-            <AccountItem
-              key={`some-${wallet.id}`}
-              checked={wallet.id === walletState[chainType].walletId}
-              wallet={wallet}
-              onClick={() => {
-                if (!wallet._isInstall) {
-                  toast.warning('Wallet not installed')
-                  return
-                }
-                setWalletState((prev) => {
-                  return update(prev, {
-                    [chainType]: {
-                      walletId: {
-                        $set: wallet.id
-                      }
-                    }
-                  })
-                })
-                back()
-              }}
-            />
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-function MultiTopTabItem({
-  selected,
-  children,
-  ...otherProps
-}: {
-  selected: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->) {
-  return (
-    <div
-      {...otherProps}
-      className={classNames(
-        'tm-flex-1 tm-h-12 tm-flex first:tm-border-l-0 tm-items-center tm-border tm-border-[#D4D4D4] dark:tm-border-[#282828] tm-border-r-0 tm-justify-center tm-cursor-pointer',
-        {
-          'tm-bg-white dark:tm-bg-[#282828]': selected
-        }
-      )}
-    >
-      <div
-        className={classNames('tm-flex tm-gap-1', {
-          'tm-grayscale tm-opacity-45': !selected
-        })}
-      >
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function useWalletList(chainType?: ChainType) {
+export function useWalletList(chainType?: ChainType) {
   const tomoSetting = useAtomValue(tomoProviderSettingAtom)
   return useMemo(() => {
     const list = getIndexWallets(tomoSetting)
@@ -246,83 +58,62 @@ function useWalletList(chainType?: ChainType) {
 }
 
 export function SelectWalletChildren(props: {
-  chainType?: ChainType
+  chainType: ChainType
   type: 'connect' | 'select'
 }) {
   const { chainType, type } = props
-  const pageService = usePageService()
   const [loading, loadingFn] = useLoading()
   useLoadingPage(loading)
+  const clickWallet = useClickWallet()
   const toast = useToast()
-  const walletConnect = useWalletConnect()
-  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  const pageControl = usePageControl()
-  const clickWallet = async (wallet: TomoWallet) => {
-    try {
-      new wallet.connectProvider()
-    } catch (e) {
-      toast.warning('Wallet not installed')
-      return
-    }
-    if (type === 'select') {
-      pageControl.close(wallet)
-      return
-    }
-    const result = await pageService.open(<BtcConnectConfirm />, {
-      type: 'drawer'
-    })
-    if (!result) {
-      return
-    }
-
-    loadingFn(async () => {
-      try {
-        await walletConnect.connect([wallet.id])
-      } catch (e: any) {
-        toast.error(e?.message || 'Failed')
-      }
-    })
-  }
-
   const walletList = useWalletList(chainType)
-
   return (
-    <div className={'tm-relative tm-h-[618px] tm-w-full tm-overflow-hidden'}>
+    <div
+      className={
+        'tm-relative tm-flex tm-h-[700px] tm-w-[660px] tm-max-w-full tm-max-w-full tm-flex-col tm-justify-start tm-gap-5 tm-overflow-hidden tm-rounded-3xl tm-bg-white tm-pt-9 tm-text-tc1 dark:tm-bg-mbg-dark dark:tm-text-tc1-dark'
+      }
+    >
+      <div className={'tm-flex tm-flex-col tm-gap-5 tm-px-6 tm-pb-9'}>
+        <div className={'tm-text-[24px]'}>Select your wallet</div>
+        <div>
+          Connect a <span className={'tm-capitalize'}>{chainType}</span> Wallet
+        </div>
+      </div>
+
       <div
-        className={'tm-box-border tm-flex tm-h-full tm-w-full tm-flex-col  '}
+        className={
+          'tm-box-border tm-w-full tm-flex-1 tm-gap-5 tm-overflow-y-auto tm-pb-6 tm-pt-2'
+        }
       >
-        <PageHeaderMin showBack={type === 'select'}>
-          Select your {chainType} wallet
-        </PageHeaderMin>
+        {/* Accounts List */}
         <div
           className={
-            'tm-box-border tm-w-full tm-flex-1 tm-gap-5 tm-overflow-y-auto tm-pb-6 tm-pt-2'
+            'tm-grid tm-w-full tm-flex-1 tm-grid-cols-1 sm:tm-grid-cols-2 tm-gap-6 tm-px-6'
           }
         >
-          {/* Accounts List */}
-          <div
-            className={
-              'tm-flex tm-w-full tm-flex-1 tm-flex-col tm-gap-3 tm-overflow-auto tm-px-6'
-            }
-          >
-            {/* Some Wallets */}
-            {walletList.map((wallet) => {
-              return (
-                <AccountItem
-                  key={`some-${wallet.id}`}
-                  wallet={wallet}
-                  onClick={() => {
-                    clickWallet(wallet)
-                  }}
-                />
-              )
-            })}
-          </div>
+          {/* Some Wallets */}
+          {walletList.map((wallet) => {
+            return (
+              <AccountItem
+                key={`some-${wallet.id}`}
+                wallet={wallet}
+                onClick={() => {
+                  loadingFn(async () => {
+                    try {
+                      await clickWallet(wallet)
+                    } catch (e: any) {
+                      toast.error(e?.message || 'Failed')
+                    }
+                  })
+                }}
+              />
+            )
+          })}
         </div>
-        {/* Footers */}
-        <div className="tm-bg-red tm-flex tm-flex-row tm-items-center tm-justify-center tm-pt-8 tm-text-center">
-          <BottomPoweredBy />
-        </div>
+      </div>
+      {/* Footers */}
+      <div className="tm-bg-red tm-flex tm-flex-row tm-items-center tm-justify-center tm-text-center">
+        <BottomPoweredBy />
       </div>
     </div>
   )
@@ -339,12 +130,10 @@ function AccountItem({ wallet, ...otherProps }: iAccountItem) {
   const handleClick = () => {
     onClick && onClick()
   }
-  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  const option = tomoSetting.chainOption?.[wallet.chainType]
   return (
     <div
       className={classNames(
-        'tm-flex tm-h-[58px] tm-cursor-pointer tm-justify-between tm-rounded-lg tm-bg-white dark:tm-bg-[#282828] tm-px-4 hover:tm-bg-opacity-60',
+        'tm-flex tm-h-[58px] tm-cursor-pointer tm-justify-between tm-rounded-lg tm-bg-white dark:tm-bg-[#282828] tm-px-2 hover:tm-bg-tc1/5 dark:hover:tm-bg-opacity-60 tm-border tm-border-[rgba(94,96,97,0.30)] tm-transition',
         {
           'tm-border tm-border-primary': checked
         }
@@ -353,107 +142,36 @@ function AccountItem({ wallet, ...otherProps }: iAccountItem) {
     >
       {/* Account icon & name */}
       <div className={'tm-flex tm-items-center tm-gap-3.5 '}>
-        <div className="tm-size-[26px]">
+        <div className="tm-size-[34px]">
           <img
             src={wallet?.img}
             alt={wallet?.name}
             className={'tm-h-full tm-w-full tm-rounded-lg'}
           />
         </div>
-        <div className={'tm-font-medium tm-text-base'}>{wallet.name}</div>
+        <div className={'tm-text-sm'}>{wallet.name}</div>
       </div>
       {/* Account links */}
       <div className={'tm-flex tm-items-center tm-gap-2'}>
         {/*{checked && <CheckIcon className={'tm-text-primary tm-size-6'} />}*/}
         {wallet.type === 'extension' && wallet._isInstall && (
-          <div
-            className={
-              'tm-bg-[#e3e3e3] dark:tm-bg-[#303030] tm-px-2.5 tm-rounded-full tm-text-xs tm-text-[#666] dark:tm-text-white'
-            }
-          >
-            Installed
-          </div>
+          <WalletLabel>Installed</WalletLabel>
         )}
-        {wallet.type === 'qrcode' && (
-          <div
-            className={
-              'tm-bg-primary/20 tm-px-2.5 tm-rounded-full tm-text-xs tm-text-primary'
-            }
-          >
-            QR code
-          </div>
-        )}
-        {wallet.type === 'injected' && (
-          <div
-            className={
-              'tm-bg-primary/20 tm-px-2.5 tm-rounded-full tm-text-xs tm-text-primary'
-            }
-          >
-            Injected
-          </div>
-        )}
+        {wallet.type === 'qrcode' && <WalletLabel>QR code</WalletLabel>}
+        {wallet.type === 'injected' && <WalletLabel>Injected</WalletLabel>}
       </div>
     </div>
   )
 }
 
-function ChainTypeWalletSelectItem({
-  chainType,
-  onClick
-}: {
-  chainType: ChainType
-  onClick?: () => void
-}) {
-  const [walletState, setWalletState] = useAtom(walletStateAtom)
-  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  const tomoStyleOption = useAtomValue(tomoStyleOptionAtom)
-  const walletId = walletState[chainType].walletId!
-  const wallet = getWalletById(walletId, tomoSetting)
-  const option = tomoSetting.chainOption?.[chainType]
+function WalletLabel({ children }: { children: any }) {
   return (
     <div
       className={
-        'tm-flex tm-h-[80px] tm-cursor-pointer tm-justify-between tm-rounded-lg tm-bg-white dark:tm-bg-[#282828] tm-px-4 hover:tm-bg-opacity-60 tm-border tm-border-tc1/10'
+        'tm-rounded-full tm-bg-[#f6f7f3] tm-px-2.5 tm-py-1 tm-text-[10px] tm-text-[#666] dark:tm-bg-[#444] dark:tm-text-white'
       }
-      onClick={onClick}
     >
-      {/* Account icon & name */}
-      <div className={'tm-flex tm-items-center tm-gap-3.5 '}>
-        <div className="tm-size-8">
-          <img
-            src={
-              (tomoStyleOption.theme === 'dark' && option?.darkLogo) ||
-              option?.logo
-            }
-            className={'tm-size-[30px]'}
-          />
-        </div>
-        <div className={' tm-flex tm-flex-col'}>
-          <div className={'tm-text-lg tm-font-medium'}>
-            <span className={'tm-font-normal'}>For</span> {option?.name}
-          </div>
-          {wallet && (
-            <div className={'tm-flex tm-gap-1 tm-items-center'}>
-              <div
-                className={
-                  'tm-size-1.5 tm-border tm-border-primary tm-rounded-full'
-                }
-              ></div>
-              <div className={'tm-text-xs'}>{wallet.name}</div>
-            </div>
-          )}
-        </div>
-      </div>
-      {/* Account links */}
-      <div className={'tm-flex tm-items-center tm-gap-2'}>
-        <div
-          className={
-            'tm-rounded-full tm-px-4 tm-text-xs tm-font-medium tm-bg-tc1 dark:tm-bg-[#444] tm-text-white tm-h-6 tm-flex tm-items-center'
-          }
-        >
-          Select
-        </div>
-      </div>
+      {children}
     </div>
   )
 }
