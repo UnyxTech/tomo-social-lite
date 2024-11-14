@@ -21,7 +21,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@tomo-inc/tomo-wallet-provider": "^1.0.23",
+    "@tomo-inc/tomo-wallet-provider": "^1.0.24",
     "animate.css": "^4.1.1",
     "buffer": "^6.0.3",
     "classnames": "^2.5.1",
@@ -29,8 +29,6 @@
     "immutability-helper": "^3.1.1",
     "jotai": "^2.9.0",
     "long": "^5.2.3",
-    "react": "^18",
-    "react-dom": "^18",
     "tailwind-merge": "2.2.2"
   },
   "peerDependencies": {
@@ -38,6 +36,8 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "react": "^18",
+    "react-dom": "^18",
     "@bitcoinerlab/secp256k1": "^1.1.1",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/stargate": "^0.32.4",

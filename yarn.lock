@@ -1048,10 +1048,10 @@
     "@testing-library/dom" "^9.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tomo-inc/tomo-wallet-provider@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.0.23.tgz#a638a8a957ab93335fd934be05e9a635e1a52e20"
-  integrity sha512-J15kfVeOuNtAK/+gwB+xL40I95Bp1hmos2GyjJHIkiOw5k22aYLnHxNt4y+4hlwB2n/qLn9gxopX8Zm2eL3X6A==
+"@tomo-inc/tomo-wallet-provider@^1.0.24":
+  version "1.0.24"
+  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.0.24.tgz#438abcc1dfdc0bbe931553fbe5786fe456866734"
+  integrity sha512-LSldUfl891V9oq/kyMow4bad/+zCAoYCA9kBURHZQ16yG1CUHmhnpsVxkjVNamatCjGMeUNIQUFjzO13Z0cXZQ==
   dependencies:
     events "^3.3.0"
     long "^5.2.3"
