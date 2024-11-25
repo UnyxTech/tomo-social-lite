@@ -41,7 +41,7 @@ export default function TomoModal() {
       <div
         // className={'tm-relative tm-m-auto tm-overflow-hidden tm-rounded-3xl'}
         className={
-          'tm-absolute sm:tm-relative sm:tm-m-auto sm:tm-w-auto tm-bottom-0 tm-left-0 tm-w-full tm-overflow-hidden tm-rounded-t sm:tm-rounded-b animate__animated animate__fadeInUp animate__faster sm:tm-animate-none'
+          'tm-absolute sm:tm-relative sm:tm-m-auto sm:tm-w-auto tm-bottom-0 tm-left-0 tm-w-full tm-overflow-hidden tm-rounded-t-3xl sm:tm-rounded-b-3xl animate__animated animate__fadeInUp animate__faster sm:tm-animate-none'
         }
         style={{
           filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.30))',

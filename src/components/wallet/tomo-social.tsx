@@ -34,7 +34,7 @@ export function TomoSocial({
   return (
     <div
       className={classNames(
-        'tomo-social tm-relative tm-flex tm-max-w-full tm-justify-start tm-overflow-hidden tm-rounded tm-bg-mbg dark:tm-bg-mbg-dark tm-text-tc1 dark:tm-text-tc1-dark',
+        'tomo-social tm-relative tm-flex tm-max-w-full tm-justify-start tm-overflow-hidden tm-rounded-3xl tm-bg-mbg dark:tm-bg-mbg-dark tm-text-tc1 dark:tm-text-tc1-dark',
         {
           'tm-rounded-b-none': isModal
         },
@@ -90,7 +90,7 @@ export function TomoSocial({
                 e.stopPropagation()
               }}
               className={classNames(
-                'tm-absolute tm-bottom-0 tm-left-0 tm-max-h-full tm-w-full tm-overflow-hidden tm-rounded',
+                'tm-absolute tm-bottom-0 tm-left-0 tm-max-h-full tm-w-full tm-overflow-hidden',
                 {
                   'tm-bg-white dark:tm-bg-white-dark': !page.opt?.noBg,
                   'tm-h-full': page.opt?.full,
@@ -118,7 +118,7 @@ function TomoIndex({ chainType }: { chainType: ChainType }) {
       // eslint-disable-next-line tailwindcss/no-custom-classname
       <div
         className={
-          'tm-flex tm-h-[618px] tm-w-full tm-items-center tm-justify-center'
+          'tm-flex tm-h-[700px] tm-w-[660px] tm-items-center tm-justify-center'
         }
       >
         <ReloadIcon

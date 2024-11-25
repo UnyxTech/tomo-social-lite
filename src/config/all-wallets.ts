@@ -13,8 +13,7 @@ export type TomoWallet = {
   type: TomoWalletType
   chainType: ChainType
   connectProvider: any
-  _isInstall?: boolean
-  _isMultipleChains?: boolean
+  isInstall?: boolean
 }
 
 export let allWallets = [
@@ -49,7 +48,14 @@ export function getIndexWallets(tomoSetting: TomoProviderSetting) {
       tomoSetting.indexWallets === indexWalletIds) &&
     tomoSetting.additionalWallets
   ) {
-    walletList = [...walletList, ...tomoSetting.additionalWallets]
+    walletList = [
+      ...walletList.filter((item) => {
+        return tomoSetting.additionalWallets?.every(
+          (addItem) => addItem.id !== item.id
+        )
+      }),
+      ...tomoSetting.additionalWallets
+    ]
   }
   return walletList
 }

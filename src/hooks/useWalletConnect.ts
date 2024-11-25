@@ -19,6 +19,21 @@ import { CosmosProvider, WalletProvider } from '@tomo-inc/tomo-wallet-provider'
 import { DefaultChainOption, TomoChain } from '../config/chain-base'
 import update from 'immutability-helper'
 
+const cosmosAutoAddChainRules = [
+  {
+    wallet: 'cosmos_keplr',
+    messageRegex: /There is no modular chain info for/
+  },
+  {
+    wallet: 'cosmos_leap',
+    messageRegex: /Invalid chain id/
+  },
+  {
+    wallet: 'cosmos_cosmostation',
+    messageRegex: /There is no chain info for/
+  }
+]
+
 export function getSettingChains(
   tomoSetting: TomoProviderSetting,
   chainType: ChainType
@@ -62,6 +77,7 @@ export default function useWalletConnect() {
         const { type = 'connect' } = opt
         const clientMap = get(clientMapAtom)
         const tomoSetting = get(tomoProviderSettingAtom)
+        const walletState = get(walletStateAtom)
 
         try {
           // @ts-ignore
@@ -72,11 +88,15 @@ export default function useWalletConnect() {
           try {
             await provider.connectWallet()
           } catch (e: any) {
+            if (chainType !== 'cosmos') {
+              throw e
+            }
             // cosmos chain not found
-            if (
-              chainType !== 'cosmos' ||
-              !/There is no modular chain info for/.test(e.message || '')
-            ) {
+
+            const autoRule = cosmosAutoAddChainRules.find((rule) => {
+              return rule.wallet === walletState.cosmos?.walletId
+            })
+            if (!autoRule || !autoRule.messageRegex.test(e.message || '')) {
               throw e
             }
             const data = tomoSetting.cosmosChains![0].modularData

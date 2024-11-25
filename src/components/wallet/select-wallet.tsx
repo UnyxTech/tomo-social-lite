@@ -38,10 +38,7 @@ export function useWalletList(chainType?: ChainType) {
         } catch (e) {
           isInstall = false
         }
-        wallet._isInstall = isInstall
-        wallet._isMultipleChains = list.some(
-          (item) => item !== wallet && item.name === wallet.name
-        )
+        wallet.isInstall = isInstall
         if (wallet?.type === 'injected') {
           if (isInstall) {
             isInjected = true
@@ -53,7 +50,7 @@ export function useWalletList(chainType?: ChainType) {
       })
       .filter((item) => {
         return !!item && (!isInjected || item.type !== 'extension')
-      }) as (TomoWallet & { isInstall: boolean; isMultipleChains: boolean })[]
+      }) as (TomoWallet & { isInstall: boolean })[]
   }, [tomoSetting.additionalWallets, chainType])
 }
 
@@ -70,7 +67,7 @@ export function SelectWalletChildren(props: {
   return (
     <div
       className={
-        'tm-relative tm-flex tm-h-[700px] tm-w-[660px] tm-max-w-full tm-max-w-full tm-flex-col tm-justify-start tm-gap-5 tm-overflow-hidden tm-rounded-3xl tm-bg-white tm-pt-9 tm-text-tc1 dark:tm-bg-mbg-dark dark:tm-text-tc1-dark'
+        'tm-relative tm-flex tm-h-[700px] tm-w-[660px] tm-max-w-full tm-max-w-full tm-flex-col tm-justify-start tm-gap-5 tm-overflow-hidden tm-bg-white tm-pt-9 tm-text-tc1 dark:tm-bg-mbg-dark dark:tm-text-tc1-dark'
       }
     >
       <div className={'tm-flex tm-flex-col tm-gap-5 tm-px-6 tm-pb-9'}>
@@ -154,7 +151,7 @@ function AccountItem({ wallet, ...otherProps }: iAccountItem) {
       {/* Account links */}
       <div className={'tm-flex tm-items-center tm-gap-2'}>
         {/*{checked && <CheckIcon className={'tm-text-primary tm-size-6'} />}*/}
-        {wallet.type === 'extension' && wallet._isInstall && (
+        {wallet.type === 'extension' && wallet.isInstall && (
           <WalletLabel>Installed</WalletLabel>
         )}
         {wallet.type === 'qrcode' && <WalletLabel>QR code</WalletLabel>}

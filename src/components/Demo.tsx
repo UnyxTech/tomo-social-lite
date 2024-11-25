@@ -7,13 +7,15 @@ import {
   useTomoProps,
   useTomoProviders,
   useTomoWalletConnect,
-  useTomoWalletState
+  useTomoWalletState,
+  useWalletList
 } from '../main'
 import { useLoading } from '../hooks/useLoading'
 import React, { useEffect, useState } from 'react'
 import { TomoProviderSetting } from '../state'
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { allWalletMap } from '../config/all-wallets'
+import bbnTest from '../config/demo/bbn-test.json'
 
 // window.verifyMsg = (message, address, signature, publicKey) => {
 //   return verifySimple(message, address, signature, publicKey)
@@ -42,7 +44,7 @@ export default function Demo() {
       //     name: 'Babylon',
       //     type: 'cosmos',
       //     network: 'bbn-test-3',
-      //     // modularData: bbnTest,
+      //     modularData: bbnTest,
       //     backendUrls: {
       //       rpcUrl: 'https://rpc.testnet3.babylonchain.io'
       //     }
@@ -128,6 +130,7 @@ export function ChildComponent(props: ChildProps) {
   const providers = useTomoProviders()
   const tomoProps = useTomoProps()
   const tomoWalletConnect = useTomoWalletConnect()
+  const walletList = useWalletList()
 
   const signCosmos = async (address: string, amount: string) => {
     if (!providers.cosmosProvider) {
@@ -137,7 +140,7 @@ export function ChildComponent(props: ChildProps) {
     const rpcUrl = 'https://cosmoshub.validator.network:443'
     const client = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      providers.cosmosProvider?.offlineSigner
+      providers.cosmosProvider!.offlineSigner!
     )
 
     const result = await client.sendTokens(
@@ -313,6 +316,7 @@ export function ChildComponent(props: ChildProps) {
           <ShowJson obj={tomoWalletState} title={'useTomoWalletState'} />
           <ShowJson obj={providers} title={'useTomoProviders'} />
           <ShowJson obj={tomoProps} title={'useTomoProps'} />
+          <ShowJson obj={walletList} title={'useWalletList'} />
         </div>
         <div
           className={
