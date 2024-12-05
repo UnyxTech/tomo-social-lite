@@ -88,7 +88,11 @@ export default function useWalletConnect() {
           try {
             await provider.connectWallet()
           } catch (e: any) {
-            if (chainType !== 'cosmos') {
+            if (
+              chainType !== 'cosmos' ||
+              // @ts-ignore
+              !provider?.provider?.experimentalSuggestChain
+            ) {
               throw e
             }
             // cosmos chain not found
@@ -103,9 +107,8 @@ export default function useWalletConnect() {
             if (!data) {
               throw e
             }
-            await (
-              provider as CosmosProvider
-            ).provider.experimentalSuggestChain(data)
+            await (provider as CosmosProvider).provider
+              .experimentalSuggestChain!(data)
             await provider.connectWallet()
           }
 

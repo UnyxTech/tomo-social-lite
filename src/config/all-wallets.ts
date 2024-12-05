@@ -32,8 +32,8 @@ export type WalletId = string
 
 export function getWalletById(id: WalletId, tomoSetting: TomoProviderSetting) {
   return (
-    allWalletMap[id] ||
-    tomoSetting.additionalWallets?.find((item) => item.id === id)
+    tomoSetting.additionalWallets?.find((item) => item.id === id) ||
+    allWalletMap[id]
   )
 }
 

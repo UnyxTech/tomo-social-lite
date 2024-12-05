@@ -76,7 +76,15 @@ export type WalletState = {
 } & Record<ChainType, ConnectInfo>
 
 export const INIT_WALLET_STATE = {
-  isConnected: false
+  isConnected: false,
+  bitcoin: {
+    connected: false,
+    chainType: 'bitcoin'
+  },
+  cosmos: {
+    connected: false,
+    chainType: 'cosmos'
+  }
   // btcAddressType: 'P2TR'
 } as WalletState
 
