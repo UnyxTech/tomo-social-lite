@@ -193,7 +193,10 @@ export default function useWalletConnect() {
       const provider = (newClientMap[`${wallet.chainType}Provider`] =
         new wallet.connectProvider(
           // @ts-ignore
-          tomoProviderSetting[`${wallet.chainType}Chains`]
+          {
+            chains: tomoProviderSetting[`${wallet.chainType}Chains`],
+            ...tomoProviderSetting.providerOptions
+          }
         ))
 
       setClientMap((prev) => {
@@ -328,8 +331,7 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
       // save opt
       const tomoSetting = {
         ...get(tomoProviderSettingAtom),
-        ...opt,
-        chainOption: { ...DefaultChainOption, ...opt.chainOption }
+        ...opt
       } as TomoProviderSetting
 
       chainTypeList.forEach((type) => {
@@ -372,7 +374,10 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           if (wallet) {
             try {
               // @ts-ignore
-              new wallet.connectProvider(tomoSetting[`${chainType}Chains`])
+              new wallet.connectProvider({
+                chains: tomoSetting[`${chainType}Chains`],
+                ...tomoSetting.providerOptions
+              })
             } catch (e) {
               /* empty */
             }

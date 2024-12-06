@@ -10,7 +10,11 @@ import useWalletConnect from './hooks/useWalletConnect'
 import { TomoSocial } from './components/wallet/tomo-social'
 import { indexWalletIds } from 'config/all-wallets'
 import { BTCProvider, CosmosProvider } from '@tomo-inc/tomo-wallet-provider'
-import { useClickWallet, useWalletList } from 'components/wallet/select-wallet'
+import {
+  useClickWallet,
+  useWalletList,
+  useWalletListWithIsInstall
+} from 'components/wallet/select-wallet'
 
 function useTomoWalletState() {
   return useAtomValue(walletStateAtom)
@@ -45,7 +49,8 @@ export {
   BTCProvider,
   CosmosProvider,
   useClickWallet,
-  useWalletList
+  useWalletList,
+  useWalletListWithIsInstall
 }
 
 export { tomoBitcoin, tomoBitcoinSignet } from 'config/chain-base'

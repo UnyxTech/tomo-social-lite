@@ -10,6 +10,7 @@ import {
 import { useSetAtom } from 'jotai/index'
 import React, { useCallback, useEffect } from 'react'
 import { useAtomCallback } from 'jotai/utils'
+import { createPortal } from 'react-dom'
 
 export default function TomoModal() {
   const walletState = useAtomValue(walletStateAtom)
@@ -29,7 +30,7 @@ export default function TomoModal() {
     return null
   }
 
-  return (
+  return createPortal(
     <div
       className={
         'tomo-social tm-fixed tm-left-0 tm-top-0 tm-z-40 tm-box-border tm-flex tm-h-screen tm-w-screen tm-overflow-auto tm-bg-tc1/30  tm-font-poppins'
@@ -64,7 +65,8 @@ export default function TomoModal() {
 
         <TomoSocial isModal chainType={tomoModal.chainType} />
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 

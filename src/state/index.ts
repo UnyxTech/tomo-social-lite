@@ -5,13 +5,12 @@ import { bitcoinChains, cosmosChains } from '../config/chains'
 import { Buffer as BufferPolyfill } from 'buffer'
 import { ModalResult } from '../components/wallet/tomo-modal'
 import { indexWalletIds, TomoWallet, WalletId } from '../config/all-wallets'
+import { TomoChainBTC, TomoChainCosmos } from '../config/chain-base'
 import {
-  DefaultChainOption,
-  TomoChainBTC,
-  TomoChainCosmos,
-  TomoChainOption
-} from '../config/chain-base'
-import { BTCProvider, CosmosProvider } from '@tomo-inc/tomo-wallet-provider'
+  BTCProvider,
+  CosmosProvider,
+  ProviderOption
+} from '@tomo-inc/tomo-wallet-provider'
 
 if (typeof window !== 'undefined') {
   window.Buffer = BufferPolyfill
@@ -145,19 +144,13 @@ export type TomoProviderSetting = {
     privacyPolicyUrl?: string
   }
   additionalWallets?: TomoWallet[]
-  sdkMode?: 'dev'
-  logLevel?: 'debug'
   style?: {
     rounded?: 'none' | 'small' | 'medium' | 'large'
     theme?: 'light' | 'dark'
     primaryColor?: string
   }
-  connectionHints?: {
-    isRequired?: boolean
-    text: any
-    logo?: any
-  }[]
-  chainOption?: TomoChainOption
+  // @tomo-inc/tomo-wallet-provider option
+  providerOptions?: Omit<ProviderOption, 'chains'>
 }
 
 export const INIT_TOMO_SETTING = {
@@ -168,8 +161,7 @@ export const INIT_TOMO_SETTING = {
   socialTypes: [],
   indexWallets: indexWalletIds,
   onlySocial: false,
-  useServerSettings: false,
-  chainOption: DefaultChainOption
+  useServerSettings: false
 } as TomoProviderSetting
 
 export const tomoProviderSettingAtom =

@@ -35,8 +35,22 @@ export default function Demo() {
     theme: 'light',
     primaryColor: '#FF7C2A'
   })
+  const isChildren = window.parent !== window
+  if (!isChildren) {
+    return (
+      <iframe
+        className={'tm-w-screen tm-h-screen tm-border-none tm-absolute'}
+        src={'/'}
+      />
+    )
+  }
   return (
     <TomoContextProvider
+      providerOptions={{
+        getWindow() {
+          return window.parent
+        }
+      }}
       // chainTypes={['bitcoin']}
       // cosmosChains={[
       //   {
@@ -59,14 +73,6 @@ export default function Demo() {
       //     }
       //   }
       // ]}
-      chainOption={{
-        cosmos: {
-          id: 'cosmos',
-          name: 'Babylon',
-          logo: '/babylon-logo-dark.svg',
-          darkLogo: '/babylon-logo.svg'
-        }
-      }}
       style={style}
       // indexWallets={[
       //   'bitcoin_okx',
@@ -89,31 +95,6 @@ export default function Demo() {
       //     img: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg'
       //   }
       // ]}
-      connectionHints={[
-        {
-          text: 'Subject to Developer’s compliance with the terms and conditions of this Agreement',
-          logo: (
-            <img className={'tm-size-5'} src={'https://tomo.inc/favicon.ico'} />
-          )
-        },
-        {
-          text: 'I certify that there are no Bitcoin inscriptions tokens in my wallet.'
-        },
-        {
-          isRequired: true,
-          text: (
-            <span>
-              I certify that I have read and accept the updated{' '}
-              <a className={'tm-text-primary'}>Terms of Use</a> and{' '}
-              <a className={'tm-text-primary'}>Privacy Policy</a>.
-            </span>
-          )
-        }
-      ]}
-      // uiOptions={{
-      //   termsAndServiceUrl: 'https://policies.google.com/terms',
-      //   privacyPolicyUrl: 'https://policies.google.com/privacy'
-      // }}
     >
       <ChildComponent style={style} setStyle={setStyle} />
     </TomoContextProvider>

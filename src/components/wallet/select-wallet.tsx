@@ -3,7 +3,7 @@ import { getIndexWallets, TomoWallet } from '../../config/all-wallets'
 import { useLoading, useLoadingPage } from '../../hooks/useLoading'
 import useToast from '../../hooks/useToast'
 import useWalletConnect from '../../hooks/useWalletConnect'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { ChainType, tomoProviderSettingAtom } from '../../state'
 import classNames from 'classnames'
@@ -14,9 +14,10 @@ export default function SelectWallet({ chainType }: { chainType: ChainType }) {
 
 export function useClickWallet() {
   const walletConnect = useWalletConnect()
+  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
   return async (wallet: TomoWallet) => {
     try {
-      new wallet.connectProvider()
+      new wallet.connectProvider({ chains: [], ...tomoSetting.providerOptions })
     } catch (e) {
       throw new Error('Wallet not installed')
     }
@@ -26,7 +27,19 @@ export function useClickWallet() {
 
 export function useWalletList(chainType?: ChainType) {
   const tomoSetting = useAtomValue(tomoProviderSettingAtom)
+
   return useMemo(() => {
+    const list = getIndexWallets(tomoSetting)
+    return list.filter((wallet) =>
+      chainType ? wallet.chainType === chainType : true
+    )
+  }, [tomoSetting, chainType])
+}
+
+export function useWalletListWithIsInstall(chainType?: ChainType) {
+  const tomoSetting = useAtomValue(tomoProviderSettingAtom)
+  const [walletList, setWalletList] = useState<TomoWallet[]>()
+  const getWalletList = () => {
     const list = getIndexWallets(tomoSetting)
     let isInjected = false
     return list
@@ -34,7 +47,10 @@ export function useWalletList(chainType?: ChainType) {
       .map((wallet) => {
         let isInstall = true
         try {
-          new wallet.connectProvider()
+          new wallet.connectProvider({
+            chains: [],
+            ...tomoSetting.providerOptions
+          })
         } catch (e) {
           isInstall = false
         }
@@ -50,8 +66,12 @@ export function useWalletList(chainType?: ChainType) {
       })
       .filter((item) => {
         return !!item && (!isInjected || item.type !== 'extension')
-      }) as (TomoWallet & { isInstall: boolean })[]
-  }, [tomoSetting.additionalWallets, chainType])
+      }) as TomoWallet[]
+  }
+  useEffect(() => {
+    setWalletList(getWalletList())
+  }, [tomoSetting, chainType])
+  return walletList
 }
 
 export function SelectWalletChildren(props: {
@@ -63,7 +83,7 @@ export function SelectWalletChildren(props: {
   useLoadingPage(loading)
   const clickWallet = useClickWallet()
   const toast = useToast()
-  const walletList = useWalletList(chainType)
+  const walletList = useWalletListWithIsInstall(chainType) || []
   return (
     <div
       className={

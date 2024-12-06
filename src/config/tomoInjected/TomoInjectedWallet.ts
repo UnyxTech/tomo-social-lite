@@ -1,9 +1,10 @@
 import {
   BTCProvider,
   CosmosProvider,
-  TomoCosmosInjected,
-  TomoChain,
-  TomoBitcoinInjected
+  getWindow,
+  ProviderOption,
+  TomoBitcoinInjected,
+  TomoCosmosInjected
 } from '@tomo-inc/tomo-wallet-provider'
 
 export type InjectedTomo = {
@@ -17,15 +18,15 @@ export type InjectedTomo = {
 
 class TomoInjectedBTCWallet extends BTCProvider {
   injectedTomo: InjectedTomo
-  constructor(chains: TomoChain[]) {
+  constructor(option: ProviderOption) {
     // @ts-ignore
-    const injectedTomo = window?.injectedTomo as InjectedTomo
+    const injectedTomo = getWindow(option)?.injectedTomo as InjectedTomo
     const bitcoinNetworkProvider = injectedTomo?.bitcoin
 
     if (!bitcoinNetworkProvider) {
       throw new Error('Injected Tomo Wallet not found')
     }
-    super(chains, bitcoinNetworkProvider)
+    super(option, bitcoinNetworkProvider)
     tomoInjectedBtcWallet.img = injectedTomo.info.logo
     tomoInjectedBtcWallet.name = injectedTomo.info.name
     this.injectedTomo = injectedTomo
@@ -46,15 +47,15 @@ class TomoInjectedBTCWallet extends BTCProvider {
 
 class TomoInjectedCosmosWallet extends CosmosProvider {
   injectedTomo: InjectedTomo
-  constructor(chains: TomoChain[]) {
+  constructor(option: ProviderOption) {
     // @ts-ignore
-    const injectedTomo = window?.injectedTomo as InjectedTomo
+    const injectedTomo = getWindow(option)?.injectedTomo as InjectedTomo
     const cosmosProvider = injectedTomo?.cosmos
 
     if (!cosmosProvider) {
       throw new Error('Injected Tomo Wallet not found')
     }
-    super(chains, cosmosProvider)
+    super(option, cosmosProvider)
     tomoInjectedCosmosWallet.img = injectedTomo.info.logo
     tomoInjectedCosmosWallet.name = injectedTomo.info.name
     this.injectedTomo = injectedTomo
