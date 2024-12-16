@@ -1,5 +1,5 @@
 import { ChainType, TomoProviderSetting } from '../state'
-import { walletList } from '@tomo-inc/tomo-wallet-provider'
+import { btcWalletList, cosmosWalletList } from '@tomo-inc/tomo-wallet-provider'
 import {
   tomoInjectedBtcWallet,
   tomoInjectedCosmosWallet
@@ -16,17 +16,18 @@ export type TomoWallet = {
   isInstall?: boolean
 }
 
-export let allWallets = [
+export const allWallets = [
   tomoInjectedBtcWallet,
   tomoInjectedCosmosWallet,
-  ...walletList
+  ...btcWalletList,
+  ...cosmosWalletList
 ] as TomoWallet[]
 
-export let allWalletMap = allWallets.reduce((m: any, item) => {
+export const allWalletMap = allWallets.reduce((m: any, item) => {
   m[item.id] = item
   return m
 }, {}) as Record<string, TomoWallet>
-export let indexWalletIds = allWallets.map((item) => item.id) as string[]
+export const indexWalletIds = allWallets.map((item) => item.id) as string[]
 
 export type WalletId = string
 

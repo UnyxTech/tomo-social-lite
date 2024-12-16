@@ -43,6 +43,13 @@ class TomoInjectedBTCWallet extends BTCProvider {
     }
     return this
   }
+
+  getWalletProviderName(): Promise<string> {
+    return Promise.resolve(this.injectedTomo?.info?.name)
+  }
+  getWalletProviderIcon(): Promise<string> {
+    return Promise.resolve(this.injectedTomo?.info?.logo)
+  }
 }
 
 class TomoInjectedCosmosWallet extends CosmosProvider {
@@ -59,6 +66,12 @@ class TomoInjectedCosmosWallet extends CosmosProvider {
     tomoInjectedCosmosWallet.img = injectedTomo.info.logo
     tomoInjectedCosmosWallet.name = injectedTomo.info.name
     this.injectedTomo = injectedTomo
+  }
+  getWalletProviderName(): Promise<string> {
+    return Promise.resolve(this.injectedTomo?.info?.name)
+  }
+  getWalletProviderIcon(): Promise<string> {
+    return Promise.resolve(this.injectedTomo?.info?.logo)
   }
 }
 

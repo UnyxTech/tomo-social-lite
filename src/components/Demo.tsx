@@ -1,6 +1,4 @@
 import {
-  tomoBitcoin,
-  tomoBitcoinSignet,
   TomoContextProvider,
   TomoSocial,
   useTomoModalControl,
@@ -9,17 +7,12 @@ import {
   useTomoWalletConnect,
   useTomoWalletState,
   useWalletList
-} from '../main'
-import { useLoading } from '../hooks/useLoading'
-import React, { useEffect, useState } from 'react'
-import { TomoProviderSetting } from '../state'
-import { SigningStargateClient } from '@cosmjs/stargate'
-import { allWalletMap } from '../config/all-wallets'
-import bbnTest from '../config/demo/bbn-test.json'
+} from 'main'
+import React, { useState } from 'react'
 
-// window.verifyMsg = (message, address, signature, publicKey) => {
-//   return verifySimple(message, address, signature, publicKey)
-// }
+import '@tomo-inc/wallet-connect-sdk/style.css'
+import { ChainType, TomoProviderSetting } from '../state'
+
 // window.injectedTomo = {
 //   info: {
 //     name: 'Tomo Inject xxx',
@@ -35,67 +28,9 @@ export default function Demo() {
     theme: 'light',
     primaryColor: '#FF7C2A'
   })
-  const isChildren = window.parent !== window
-  if (!isChildren) {
-    return (
-      <iframe
-        className={'tm-w-screen tm-h-screen tm-border-none tm-absolute'}
-        src={'/'}
-      />
-    )
-  }
+
   return (
-    <TomoContextProvider
-      providerOptions={{
-        getWindow() {
-          return window.parent
-        }
-      }}
-      // chainTypes={['bitcoin']}
-      // cosmosChains={[
-      //   {
-      //     id: 2,
-      //     name: 'Babylon',
-      //     type: 'cosmos',
-      //     network: 'bbn-test-3',
-      //     modularData: bbnTest,
-      //     backendUrls: {
-      //       rpcUrl: 'https://rpc.testnet3.babylonchain.io'
-      //     }
-      //   }
-      // ]}
-      // bitcoinChains={[
-      //   {
-      //     ...tomoBitcoin,
-      //     backendUrls: {
-      //       inscriptionUrl: 'https://inscriptions.xxx.io/api',
-      //       mempoolUrl: 'https://mempool.testnet.xxx.io/api'
-      //     }
-      //   }
-      // ]}
-      style={style}
-      // indexWallets={[
-      //   'bitcoin_okx',
-      //   'bitcoin_unisat',
-      //   'bitcoin_tomo',
-      //   'bitcoin_onekey',
-      //   'bitcoin_bitget',
-      //   'bitcoin_keystone',
-      //   'bitcoin_imtoken',
-      //   'bitcoin_binance',
-      //   'xxx'
-      // ]}
-      // additionalWallets={[
-      //   {
-      //     id: 'bitcoin_xxx',
-      //     name: 'xxx-xxx bitcoin',
-      //     chainType: 'bitcoin',
-      //     connectProvider: TomoTestWallet,
-      //     type: 'extension',
-      //     img: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg'
-      //   }
-      // ]}
-    >
+    <TomoContextProvider style={style}>
       <ChildComponent style={style} setStyle={setStyle} />
     </TomoContextProvider>
   )
@@ -113,17 +48,18 @@ export function ChildComponent(props: ChildProps) {
   const tomoWalletConnect = useTomoWalletConnect()
   const walletList = useWalletList()
 
-  const signCosmos = async (address: string, amount: string) => {
+  const cosmosIsConnect = tomoWalletState.cosmos?.connected
+  const btcIsConnect = tomoWalletState.bitcoin?.connected
+
+  const [cosmosAddress, setCosmosAddress] = useState('')
+  const [curChainType, setCurChainType] = useState<ChainType>('bitcoin')
+
+  const sendAtom = async (address: string, amount: string) => {
     if (!providers.cosmosProvider) {
       throw new Error('cosmosProvider not found')
     }
     const selfAddress = await providers.cosmosProvider.getAddress()
-    const rpcUrl = 'https://cosmoshub.validator.network:443'
-    const client = await SigningStargateClient.connectWithSigner(
-      rpcUrl,
-      providers.cosmosProvider!.offlineSigner!
-    )
-
+    const client = await providers.cosmosProvider.getSigningStargateClient()
     const result = await client.sendTokens(
       selfAddress,
       address,
@@ -151,6 +87,7 @@ export function ChildComponent(props: ChildProps) {
         >
           <div className={'tm-flex tm-flex-wrap tm-gap-3'}>
             <LodingButton
+              disabled={cosmosIsConnect}
               onClick={() => {
                 tomoModal.open('cosmos')
               }}
@@ -159,6 +96,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <LodingButton
+              disabled={btcIsConnect}
               onClick={async () => {
                 const result = await tomoModal.open('bitcoin')
                 console.log('modal result', result)
@@ -167,6 +105,7 @@ export function ChildComponent(props: ChildProps) {
               tomo modal - bitcoin
             </LodingButton>
             <LodingButton
+              disabled={!btcIsConnect && !cosmosIsConnect}
               onClick={async () => {
                 await tomoWalletConnect.disconnect()
               }}
@@ -175,18 +114,21 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <div className={'tm-w-full'} />
+            <input
+              value={cosmosAddress}
+              onChange={(e) => setCosmosAddress(e.target.value)}
+            />
             <LodingButton
+              disabled={!cosmosIsConnect}
               onClick={async () => {
-                await signCosmos(
-                  'cosmos15u0f6rszd07zgekvf4sy580aslsp00j52ww09r',
-                  '10000'
-                )
+                await sendAtom(cosmosAddress, '10000')
               }}
             >
-              signCosmos
+              send atom
             </LodingButton>
 
             <LodingButton
+              disabled={!cosmosIsConnect}
               onClick={async () => {
                 const result =
                   await providers.cosmosProvider?.getBalance('uatom')
@@ -196,17 +138,9 @@ export function ChildComponent(props: ChildProps) {
               cosmosProvider.getBalance('uatom')
             </LodingButton>
 
-            <LodingButton
-              onClick={async () => {
-                const result =
-                  await providers.cosmosProvider?.getBalance('ubbn')
-                console.log('cosmos balance', result)
-              }}
-            >
-              cosmosProvider.getBalance('ubbn')
-            </LodingButton>
             <div className={'tm-w-full'} />
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result = await providers.bitcoinProvider?.getBalance()
@@ -220,6 +154,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result =
@@ -233,6 +168,7 @@ export function ChildComponent(props: ChildProps) {
               btc getInscriptions()
             </LodingButton>
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result = await providers.bitcoinProvider?.getUtxos(
@@ -247,6 +183,7 @@ export function ChildComponent(props: ChildProps) {
               btc getUtxos()
             </LodingButton>
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result =
@@ -261,6 +198,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result = await providers.bitcoinProvider?.signMessage(
@@ -277,6 +215,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <LodingButton
+              disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result = await providers.bitcoinProvider?.signMessage(
@@ -304,16 +243,25 @@ export function ChildComponent(props: ChildProps) {
             'tm-flex tm-h-full tm-w-full tm-flex-col tm-items-center tm-gap-4 tm-overflow-auto tm-px-4 tm-py-10 md:tm-w-auto md:tm-px-6'
           }
         >
-          <div>tomo social</div>
+          <div>tomo connect</div>
+          <div>
+            <LodingButton onClick={() => setCurChainType('bitcoin')}>
+              bitcoin
+            </LodingButton>
+            <LodingButton onClick={() => setCurChainType('cosmos')}>
+              cosmos
+            </LodingButton>
+          </div>
           <div>
             <LodingButton
               onClick={() => {
-                tomoModal.open('bitcoin')
+                tomoModal.open(curChainType)
               }}
             >
               open modal
             </LodingButton>
             <LodingButton
+              disabled={!btcIsConnect && !cosmosIsConnect}
               onClick={async () => {
                 await tomoWalletConnect.disconnect()
               }}
@@ -322,7 +270,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
           </div>
 
-          <TomoSocial chainType={'bitcoin'} />
+          <TomoSocial chainType={curChainType} />
         </div>
       </div>
     </div>
@@ -408,15 +356,20 @@ function LodingButton({
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >) {
-  const [loading, loadingFn] = useLoading()
+  const [loading, setLoading] = useState(false)
   return (
     <button
       {...otherProps}
       className={'tm-border tm-border-tc1 tm-px-1.5'}
       disabled={loading || disabled}
       onClick={async () => {
-        // @ts-ignore
-        await loadingFn(onClick)
+        try {
+          setLoading(true)
+          // @ts-ignore
+          await onClick()
+        } finally {
+          setLoading(false)
+        }
       }}
     />
   )
