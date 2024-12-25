@@ -476,6 +476,24 @@
   resolved "https://registry.npmmirror.com/@keystonehq/alias-sampling/-/alias-sampling-0.1.2.tgz#63af931ffe6500aef4c0d87775a5b279189abf8d"
   integrity sha512-5ukLB3bcgltgaFfQfYKYwHDUbwHicekYo53fSEa7xhVkAEqsA74kxdIwoBIURmGUtXe3EVIRm4SYlgcrt2Ri0w==
 
+"@keystonehq/animated-qr-base@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.npmmirror.com/@keystonehq/animated-qr-base/-/animated-qr-base-0.0.1.tgz#71a65db4474c40912a284b761308ce275fef8934"
+  integrity sha512-yc+W05y/l6ZWref6aaadg2en9wXAuXUbR5659cbv8qoVFbcMp3L+BpMNBxfWNUMdx2xSQQhMpsfcPP9K1ykJ+Q==
+  dependencies:
+    "@ngraveio/bc-ur" "^1.1.13"
+
+"@keystonehq/animated-qr@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.npmmirror.com/@keystonehq/animated-qr/-/animated-qr-0.10.0.tgz#57f2f088219d0e156d321c5efe521f592b29c225"
+  integrity sha512-zSblr0m790w4niDckc93x5AnYtsvdbuiDKf7hhc+sODmEKY/7/7r5E9HszWzuxtQPq215bfVFY37AtO3IXSTpQ==
+  dependencies:
+    "@keystonehq/animated-qr-base" "^0.0.1"
+    "@ngraveio/bc-ur" "^1.1.6"
+    "@zxing/browser" "^0.1.1"
+    "@zxing/library" "^0.19.1"
+    qrcode.react "^3.1.0"
+
 "@keystonehq/bc-ur-registry-aptos@^0.6.3":
   version "0.6.3"
   resolved "https://registry.npmmirror.com/@keystonehq/bc-ur-registry-aptos/-/bc-ur-registry-aptos-0.6.3.tgz#7a557b16cfecfddc4fb3a2532be7bf77c110940f"
@@ -571,10 +589,10 @@
     bs58check "^2.1.2"
     uuid "^8.3.2"
 
-"@keystonehq/bc-ur-registry-sui@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.npmmirror.com/@keystonehq/bc-ur-registry-sui/-/bc-ur-registry-sui-0.3.1.tgz#636f601620def48e0488408df049aa15718380a2"
-  integrity sha512-cbxu5AF5xFg9J3p0AXIkp1IMGSSNsaXWRgn22bcnkIlzwMEwmgJR5J/Lg45MIyIpW2p17fKyYqc9yuP0iMALEQ==
+"@keystonehq/bc-ur-registry-sui@0.4.0-alpha.0":
+  version "0.4.0-alpha.0"
+  resolved "https://registry.npmmirror.com/@keystonehq/bc-ur-registry-sui/-/bc-ur-registry-sui-0.4.0-alpha.0.tgz#2c25726e1c2f4f351e675bd44b6f54bfc473cd7f"
+  integrity sha512-pwT+wyRnmnXdwMe2buMq3lQzDWc6kj2rxR8THI7fx3dUjYRzb6H4+/A+qwBlq24RWWtHfptLTPMk+LWVy9ABDA==
   dependencies:
     "@keystonehq/bc-ur-registry" "^0.6.4"
     uuid "^9.0.0"
@@ -605,10 +623,10 @@
     bs58check "^2.1.2"
     tslib "^2.3.0"
 
-"@keystonehq/keystone-sdk@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.npmmirror.com/@keystonehq/keystone-sdk/-/keystone-sdk-0.8.1.tgz#b432534cd2d76f3b3e042412022ded595c60b070"
-  integrity sha512-9M/yC/5NRZhSPyiPZmFxovo5krzMsQ5ilL9LJdGOsfjF8sfn83KkSt+otV4bkQHsnFrRNviJGSmcrySJb17aGw==
+"@keystonehq/keystone-sdk@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.npmmirror.com/@keystonehq/keystone-sdk/-/keystone-sdk-0.9.0.tgz#5c25c27059d3cadfd86bff8559a3a3fa0e751175"
+  integrity sha512-sP2DFvQucmyz3mP+b11EYcc0sXuANHoH8esZpsGaf67+Rv4RcbJfx0Au7JZKrxwcKWLbKrI9a2h3J6Tt7SvoRQ==
   dependencies:
     "@bufbuild/protobuf" "^1.2.0"
     "@keystonehq/bc-ur-registry" "^0.7.0"
@@ -623,18 +641,19 @@
     "@keystonehq/bc-ur-registry-near" "^0.9.3"
     "@keystonehq/bc-ur-registry-sol" "^0.9.3"
     "@keystonehq/bc-ur-registry-stellar" "^0.0.4"
-    "@keystonehq/bc-ur-registry-sui" "^0.3.1"
+    "@keystonehq/bc-ur-registry-sui" "0.4.0-alpha.0"
     "@keystonehq/bc-ur-registry-ton" "^0.1.2"
     "@ngraveio/bc-ur" "^1.1.6"
+    "@noble/hashes" "^1.5.0"
     bs58check "^3.0.1"
     pako "^2.1.0"
     ripple-binary-codec "^1.4.3"
     uuid "^9.0.0"
 
-"@keystonehq/sdk@^0.21.3":
-  version "0.21.3"
-  resolved "https://registry.npmmirror.com/@keystonehq/sdk/-/sdk-0.21.3.tgz#faeb3ed2f9d832f3a9948e6a9fdcaf713a78c409"
-  integrity sha512-Zdm44vKU8+rzKWnz/ITg3pERqjAOxlT5gHD4V8MMbq1NsDZQIc/z3UI+0Ru0H+0WSyqZAxPU6MoLvL9LBMlsSA==
+"@keystonehq/sdk@0.22.1":
+  version "0.22.1"
+  resolved "https://registry.npmmirror.com/@keystonehq/sdk/-/sdk-0.22.1.tgz#ac32e989da1cb73d9bc454b1763db49f891302dd"
+  integrity sha512-yBX2L3ieoZ1llj8Ocsiu+doDP+XtoI8oUPkv50oP3aBnzqM0IBsL46upWIVUWt5DucHAdGLGcVx9FxR9sQYZBw==
   dependencies:
     "@ngraveio/bc-ur" "^1.0.0"
     "@yudiel/react-qr-scanner" "2.0.0-beta.3"
@@ -642,7 +661,7 @@
     react-modal "^3.16.1"
     rxjs "^6.6.3"
 
-"@ngraveio/bc-ur@^1.0.0", "@ngraveio/bc-ur@^1.1.5", "@ngraveio/bc-ur@^1.1.6":
+"@ngraveio/bc-ur@^1.0.0", "@ngraveio/bc-ur@^1.1.13", "@ngraveio/bc-ur@^1.1.5", "@ngraveio/bc-ur@^1.1.6":
   version "1.1.13"
   resolved "https://registry.npmmirror.com/@ngraveio/bc-ur/-/bc-ur-1.1.13.tgz#27719fd3e745ccdbe97a7950905edcd1fed4844b"
   integrity sha512-j73akJMV4+vLR2yQ4AphPIT5HZmxVjn/LxpL7YHoINnXoH6ccc90Zzck6/n6a3bCXOVZwBxq+YHwbAKRV+P8Zg==
@@ -662,22 +681,32 @@
   dependencies:
     "@noble/hashes" "1.4.0"
 
-"@noble/curves@~1.6.0":
-  version "1.6.0"
-  resolved "https://registry.npmmirror.com/@noble/curves/-/curves-1.6.0.tgz#be5296ebcd5a1730fccea4786d420f87abfeb40b"
-  integrity sha512-TlaHRXDehJuRNR9TfZDNQ45mMEd5dwUwmicsafcIX4SsNiqnCHKjE/1alYPd/lDRVhxdhUAlv8uEhMCI5zjIJQ==
+"@noble/curves@~1.7.0":
+  version "1.7.0"
+  resolved "https://registry.npmmirror.com/@noble/curves/-/curves-1.7.0.tgz#0512360622439256df892f21d25b388f52505e45"
+  integrity sha512-UTMhXK9SeDhFJVrHeUJ5uZlI6ajXg10O6Ddocf9S6GjbSBVZsJo88HzKwXznNfGpMTRDyJkqMjNDPYgf0qFWnw==
   dependencies:
-    "@noble/hashes" "1.5.0"
+    "@noble/hashes" "1.6.0"
 
 "@noble/hashes@1.4.0", "@noble/hashes@~1.4.0":
   version "1.4.0"
   resolved "https://registry.npmmirror.com/@noble/hashes/-/hashes-1.4.0.tgz#45814aa329f30e4fe0ba49426f49dfccdd066426"
   integrity sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==
 
-"@noble/hashes@1.5.0", "@noble/hashes@^1", "@noble/hashes@^1.0.0", "@noble/hashes@^1.1.5", "@noble/hashes@^1.2.0", "@noble/hashes@~1.5.0":
+"@noble/hashes@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.npmmirror.com/@noble/hashes/-/hashes-1.6.0.tgz#d4bfb516ad6e7b5111c216a5cc7075f4cf19e6c5"
+  integrity sha512-YUULf0Uk4/mAA89w+k3+yUYh6NrEvxZa5T6SY3wlMvE2chHkxFUUIDI8/XW1QSC357iA5pSnqt7XEhvFOqmDyQ==
+
+"@noble/hashes@^1", "@noble/hashes@^1.0.0", "@noble/hashes@^1.1.5", "@noble/hashes@^1.2.0":
   version "1.5.0"
   resolved "https://registry.npmmirror.com/@noble/hashes/-/hashes-1.5.0.tgz#abadc5ca20332db2b1b2aa3e496e9af1213570b0"
   integrity sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==
+
+"@noble/hashes@^1.5.0", "@noble/hashes@~1.6.0":
+  version "1.6.1"
+  resolved "https://registry.npmmirror.com/@noble/hashes/-/hashes-1.6.1.tgz#df6e5943edcea504bac61395926d6fd67869a0d5"
+  integrity sha512-pq5D8h10hHBjyqX+cfBm0i8JUXJ0UhczFc4r74zbuT9XgewFo2E3J1cOaGtdZynILNmQ685YWGzGE1Zv6io50w==
 
 "@noble/secp256k1@^1.7.1":
   version "1.7.1"
@@ -895,10 +924,15 @@
   resolved "https://registry.npmmirror.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.24.0.tgz#0574d7e87b44ee8511d08cc7f914bcb802b70818"
   integrity sha512-fbMkAF7fufku0N2dE5TBXcNlg0pt0cJue4xBRE2Qc5Vqikxr4VCgKj/ht6SMdFcOacVA9rqF70APJ8RN/4vMJw==
 
-"@scure/base@~1.1.6", "@scure/base@~1.1.7":
+"@scure/base@~1.1.6":
   version "1.1.9"
   resolved "https://registry.npmmirror.com/@scure/base/-/base-1.1.9.tgz#e5e142fbbfe251091f9c5f1dd4c834ac04c3dbd1"
   integrity sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==
+
+"@scure/base@~1.2.1":
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/@scure/base/-/base-1.2.1.tgz#dd0b2a533063ca612c17aa9ad26424a2ff5aa865"
+  integrity sha512-DGmGtC8Tt63J5GfHgfl5CuAXh96VF/LD8K9Hr/Gv0J2lAoRGlPOMpqMpMbCTOoOJMZCk2Xt+DskdDyn6dEFdzQ==
 
 "@scure/bip32@1.4.0":
   version "1.4.0"
@@ -909,14 +943,14 @@
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
 
-"@scure/bip32@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.npmmirror.com/@scure/bip32/-/bip32-1.5.0.tgz#dd4a2e1b8a9da60e012e776d954c4186db6328e6"
-  integrity sha512-8EnFYkqEQdnkuGBVpCzKxyIwDCBLDVj3oiX0EKUFre/tOjL/Hqba1D6n/8RcmaQy4f95qQFrO2A8Sr6ybh4NRw==
+"@scure/bip32@^1.4.0":
+  version "1.6.0"
+  resolved "https://registry.npmmirror.com/@scure/bip32/-/bip32-1.6.0.tgz#6dbc6b4af7c9101b351f41231a879d8da47e0891"
+  integrity sha512-82q1QfklrUUdXJzjuRU7iG7D7XiFx5PHYVS0+oeNKhyDLT7WPqs6pBcM2W5ZdwOwKCwoE1Vy1se+DHjcXwCYnA==
   dependencies:
-    "@noble/curves" "~1.6.0"
-    "@noble/hashes" "~1.5.0"
-    "@scure/base" "~1.1.7"
+    "@noble/curves" "~1.7.0"
+    "@noble/hashes" "~1.6.0"
+    "@scure/base" "~1.2.1"
 
 "@scure/bip39@1.3.0":
   version "1.3.0"
@@ -1288,6 +1322,22 @@
   dependencies:
     "@zxing/library" "^0.20.0"
 
+"@zxing/browser@^0.1.1":
+  version "0.1.5"
+  resolved "https://registry.npmmirror.com/@zxing/browser/-/browser-0.1.5.tgz#94c0cdbc8ab5114a82dadee54939de6d9bf7e313"
+  integrity sha512-4Lmrn/il4+UNb87Gk8h1iWnhj39TASEHpd91CwwSJtY5u+wa0iH9qS0wNLAWbNVYXR66WmT5uiMhZ7oVTrKfxw==
+  optionalDependencies:
+    "@zxing/text-encoding" "^0.9.0"
+
+"@zxing/library@^0.19.1":
+  version "0.19.3"
+  resolved "https://registry.npmmirror.com/@zxing/library/-/library-0.19.3.tgz#8f8fb119edac43c109e7d74ae240daba04b7f44f"
+  integrity sha512-RUv5svewpDoD0ymXleOP8yVTO5BLkR0zn5coGC/Vs1671u0OBJ4xdtR8WVWf08OcvrieEMHdSfQY3ZKtqII/hg==
+  dependencies:
+    ts-custom-error "^3.2.1"
+  optionalDependencies:
+    "@zxing/text-encoding" "~0.9.0"
+
 "@zxing/library@^0.20.0":
   version "0.20.0"
   resolved "https://registry.npmmirror.com/@zxing/library/-/library-0.20.0.tgz#11bc411b87693015389555c589da61532879be7b"
@@ -1297,7 +1347,7 @@
   optionalDependencies:
     "@zxing/text-encoding" "~0.9.0"
 
-"@zxing/text-encoding@~0.9.0":
+"@zxing/text-encoding@^0.9.0", "@zxing/text-encoding@~0.9.0":
   version "0.9.0"
   resolved "https://registry.npmmirror.com/@zxing/text-encoding/-/text-encoding-0.9.0.tgz#fb50ffabc6c7c66a0c96b4c03e3d9be74864b70b"
   integrity sha512-U/4aVJ2mxI0aDNI8Uq0wEhMgY+u4CNtEb0om3+y3+niDAsoTCOB33UF0sxpzqzdqXLqmvc+vZyAt4O8pPdfkwA==
@@ -1558,11 +1608,6 @@ base-x@^4.0.0:
   resolved "https://registry.npmmirror.com/base-x/-/base-x-4.0.0.tgz#d0e3b7753450c73f8ad2389b5c018a4af7b2224a"
   integrity sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==
 
-base-x@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmmirror.com/base-x/-/base-x-5.0.0.tgz#6d835ceae379130e1a4cb846a70ac4746f28ea9b"
-  integrity sha512-sMW3VGSX1QWVFA6l8U62MLKz29rRfpTlYdCqLdpLo1/Yd4zZwSbnUaDfciIAowAqvq7YFnWq9hrhdg1KYgc1lQ==
-
 base64-js@^1.3.0, base64-js@^1.3.1:
   version "1.5.1"
   resolved "https://registry.npmmirror.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
@@ -1593,13 +1638,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.npmmirror.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
-bip174@^3.0.0-rc.0:
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/bip174/-/bip174-3.0.0-rc.1.tgz#08c41d5a4cbfa0790075335b64b9a16630fcd73f"
-  integrity sha512-+8P3BpSairVNF2Nee6Ksdc1etIjWjBOi/MH0MwKtq9YaYp+S2Hk2uvup0e8hCT4IKlS58nXJyyQVmW92zPoD4Q==
-  dependencies:
-    uint8array-tools "^0.0.9"
-    varuint-bitcoin "^2.0.0"
+bip174@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npmmirror.com/bip174/-/bip174-2.1.1.tgz#ef3e968cf76de234a546962bcf572cc150982f9f"
+  integrity sha512-mdFV5+/v0XyNYXjBS6CQPLo9ekCx4gtKZFnJm5PMto7Fs9hTTDpkkzOB7/FtluRI6JbUUAu+snTYfJRgHLZbZQ==
 
 bip39@^3.0.2:
   version "3.1.0"
@@ -1608,18 +1650,17 @@ bip39@^3.0.2:
   dependencies:
     "@noble/hashes" "^1.2.0"
 
-bitcoinjs-lib@^7.0.0-rc.0:
-  version "7.0.0-rc.0"
-  resolved "https://registry.npmmirror.com/bitcoinjs-lib/-/bitcoinjs-lib-7.0.0-rc.0.tgz#841a7e3a00d4fd719ab7f85f691b2e0455494786"
-  integrity sha512-7CQgOIbREemKR/NT2uc3uO/fkEy+6CM0sLxboVVY6bv6DbZmPt3gg5Y/hhWgQFeZu5lfTbtVAv32MIxf7lMh4g==
+bitcoinjs-lib@^6.1.5:
+  version "6.1.7"
+  resolved "https://registry.npmmirror.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.7.tgz#0f98dec1333d658574eefa455295668cfae38bb0"
+  integrity sha512-tlf/r2DGMbF7ky1MgUqXHzypYHakkEnm0SZP23CJKIqNY/5uNAnMbFhMJdhjrL/7anfb/U8+AlpdjPWjPnAalg==
   dependencies:
     "@noble/hashes" "^1.2.0"
     bech32 "^2.0.0"
-    bip174 "^3.0.0-rc.0"
-    bs58check "^4.0.0"
-    uint8array-tools "^0.0.9"
-    valibot "^0.38.0"
-    varuint-bitcoin "^2.0.0"
+    bip174 "^2.1.1"
+    bs58check "^3.0.1"
+    typeforce "^1.11.3"
+    varuint-bitcoin "^1.1.2"
 
 bn.js@^4.11.9:
   version "4.12.0"
@@ -1682,13 +1723,6 @@ bs58@^5.0.0:
   dependencies:
     base-x "^4.0.0"
 
-bs58@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/bs58/-/bs58-6.0.0.tgz#a2cda0130558535dd281a2f8697df79caaf425d8"
-  integrity sha512-PD0wEnEYg6ijszw/u8s+iI3H17cTymlrwkKhDhPZq+Sokl3AU4htyBFTjAeNAlCCmg0f53g6ih3jATyCKftTfw==
-  dependencies:
-    base-x "^5.0.0"
-
 bs58check@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmmirror.com/bs58check/-/bs58check-2.1.2.tgz#53b018291228d82a5aa08e7d796fdafda54aebfc"
@@ -1705,14 +1739,6 @@ bs58check@^3.0.1:
   dependencies:
     "@noble/hashes" "^1.2.0"
     bs58 "^5.0.0"
-
-bs58check@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmmirror.com/bs58check/-/bs58check-4.0.0.tgz#46cda52a5713b7542dcb78ec2efdf78f5bf1d23c"
-  integrity sha512-FsGDOnFg9aVI9erdriULkd/JjEWONV/lQE5aYziB5PoBsXRind56lh8doIZIc9X4HoxT5x4bLjMWN1/NB8Zp5g==
-  dependencies:
-    "@noble/hashes" "^1.2.0"
-    bs58 "^6.0.0"
 
 buffer@6.0.3, buffer@^6.0.3:
   version "6.0.3"
@@ -4705,6 +4731,11 @@ typed-array-length@^1.0.6:
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
 
+typeforce@^1.11.3:
+  version "1.18.0"
+  resolved "https://registry.npmmirror.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
+  integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
+
 typescript@^5.4.5:
   version "5.6.3"
   resolved "https://registry.npmmirror.com/typescript/-/typescript-5.6.3.tgz#5f3449e31c9d94febb17de03cc081dd56d81db5b"
@@ -4714,16 +4745,6 @@ ufo@^1.5.4:
   version "1.5.4"
   resolved "https://registry.npmmirror.com/ufo/-/ufo-1.5.4.tgz#16d6949674ca0c9e0fbbae1fa20a71d7b1ded754"
   integrity sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==
-
-uint8array-tools@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.npmmirror.com/uint8array-tools/-/uint8array-tools-0.0.8.tgz#712bab001f8347bd782f45bc47c76ffff32d1e0b"
-  integrity sha512-xS6+s8e0Xbx++5/0L+yyexukU7pz//Yg6IHg3BKhXotg1JcYtgxVcUctQ0HxLByiJzpAkNFawz1Nz5Xadzo82g==
-
-uint8array-tools@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.npmmirror.com/uint8array-tools/-/uint8array-tools-0.0.9.tgz#e29e6d05f3472273db1b0e370ac1d91e4a0a4e6f"
-  integrity sha512-9vqDWmoSXOoi+K14zNaf6LBV51Q8MayF0/IiQs3GlygIKUYtog603e6virExkjjFosfJUBI4LhbQK1iq8IG11A==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
@@ -4781,17 +4802,12 @@ uuid@^9.0.0:
   resolved "https://registry.npmmirror.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
   integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
 
-valibot@^0.38.0:
-  version "0.38.0"
-  resolved "https://registry.npmmirror.com/valibot/-/valibot-0.38.0.tgz#2d035d2a5bd36e8ea8b48b56d44552ace1a7616f"
-  integrity sha512-RCJa0fetnzp+h+KN9BdgYOgtsMAG9bfoJ9JSjIhFHobKWVWyzM3jjaeNTdpFK9tQtf3q1sguXeERJ/LcmdFE7w==
-
-varuint-bitcoin@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmmirror.com/varuint-bitcoin/-/varuint-bitcoin-2.0.0.tgz#59a53845a87ad18c42f184a3d325074465341523"
-  integrity sha512-6QZbU/rHO2ZQYpWFDALCDSRsXbAs1VOEmXAxtbtjLtKuMJ/FQ8YbhfxlaiKv5nklci0M6lZtlZyxo9Q+qNnyog==
+varuint-bitcoin@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npmmirror.com/varuint-bitcoin/-/varuint-bitcoin-1.1.2.tgz#e76c138249d06138b480d4c5b40ef53693e24e92"
+  integrity sha512-4EVb+w4rx+YfVM32HQX42AbbT7/1f5zwAYhIujKXKk8NQK+JfRVl3pqT3hjNn/L+RstigmGGKVwHA/P0wgITZw==
   dependencies:
-    uint8array-tools "^0.0.8"
+    safe-buffer "^5.1.1"
 
 vconsole@^3.15.1:
   version "3.15.1"
