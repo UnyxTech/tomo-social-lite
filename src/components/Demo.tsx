@@ -12,6 +12,7 @@ import React, { useState } from 'react'
 
 import '@tomo-inc/wallet-connect-sdk/style.css'
 import { ChainType, TomoProviderSetting } from '../state'
+import { CustomDemo } from './CustomDemo'
 
 // window.injectedTomo = {
 //   info: {
@@ -53,6 +54,7 @@ export function ChildComponent(props: ChildProps) {
 
   const [cosmosAddress, setCosmosAddress] = useState('')
   const [curChainType, setCurChainType] = useState<ChainType>('bitcoin')
+  const [isDefault, setIsDefault] = useState(true)
 
   const sendAtom = async (address: string, amount: string) => {
     if (!providers.cosmosProvider) {
@@ -198,7 +200,7 @@ export function ChildComponent(props: ChildProps) {
             </LodingButton>
 
             <LodingButton
-              disabled={!btcIsConnect}
+              // disabled={!btcIsConnect}
               onClick={async () => {
                 try {
                   const result = await providers.bitcoinProvider?.signMessage(
@@ -245,6 +247,14 @@ export function ChildComponent(props: ChildProps) {
         >
           <div>tomo connect</div>
           <div>
+            <LodingButton onClick={() => setIsDefault(true)}>
+              default
+            </LodingButton>
+            <LodingButton onClick={() => setIsDefault(false)}>
+              custom
+            </LodingButton>
+          </div>
+          <div>
             <LodingButton onClick={() => setCurChainType('bitcoin')}>
               bitcoin
             </LodingButton>
@@ -269,8 +279,11 @@ export function ChildComponent(props: ChildProps) {
               disconnect
             </LodingButton>
           </div>
-
-          <TomoSocial chainType={curChainType} />
+          {isDefault ? (
+            <TomoSocial chainType={curChainType} />
+          ) : (
+            <CustomDemo chainType={curChainType} />
+          )}
         </div>
       </div>
     </div>
