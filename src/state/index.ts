@@ -151,6 +151,7 @@ export type TomoProviderSetting = {
   }
   // @tomo-inc/tomo-wallet-provider option
   providerOptions?: Omit<ProviderOption, 'chains'>
+  autoReconnect?: boolean
 }
 
 export const INIT_TOMO_SETTING = {

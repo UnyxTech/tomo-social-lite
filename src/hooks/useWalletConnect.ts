@@ -384,7 +384,7 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
           }
         }
       })
-      if (walletState.isConnected) {
+      if (walletState.isConnected && tomoSetting.autoReconnect !== false) {
         try {
           if (
             tomoSetting.chainTypes?.some((type) => {
