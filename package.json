@@ -1,7 +1,7 @@
 {
   "name": "@tomo-inc/wallet-connect-sdk",
   "description": "wallet-connect-sdk",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "type": "module",
   "exports": {
     ".": {
