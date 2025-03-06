@@ -1,7 +1,10 @@
 import { Provider } from 'jotai'
 import { TomoProviderSetting } from '../state'
 import '../main.css'
-import { useWalletConnectInit } from '../hooks/useWalletConnect'
+import {
+  useWalletConnectInit,
+  useWatchAccountChange
+} from '../hooks/useWalletConnect'
 import TomoModal from './wallet/tomo-modal'
 import useInitStyle from '../hooks/useInitStyle'
 
@@ -22,6 +25,7 @@ export default function TomoContextProvider({
 
 function InitFnCom({ otherProps }: { otherProps: TomoProviderSetting }) {
   useWalletConnectInit(otherProps)
+  useWatchAccountChange()
   useInitStyle(otherProps)
   return null
 }

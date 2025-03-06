@@ -319,7 +319,6 @@ function initWalletState(
 
 export function useWalletConnectInit(opt: TomoProviderSetting) {
   const installWallets = useAtomValue(installWalletsAtom)
-  const [clientMap, setClientMap] = useAtom(clientMapAtom)
   const walletConnect = useWalletConnect()
   const setInstallWallet = useSetAtom(installWalletsAtom)
   useEffect(() => {
@@ -429,7 +428,18 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
     }
   }, [installWallets])
 
+  return null
+}
+
+export function useWatchAccountChange() {
+  const clientMap = useAtomValue(clientMapAtom)
+  const walletConnect = useWalletConnect()
+  const walletState = useAtomValue(walletStateAtom)
   useEffect(() => {
+    if (!walletState.bitcoin.connected) {
+      return
+    }
+
     const accountChanged = async () => {
       await walletConnect.reloadAddress({ chainType: 'bitcoin' })
     }
@@ -437,7 +447,18 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
     return () => {
       clientMap.bitcoinProvider?.off?.('accountsChanged', accountChanged)
     }
-  }, [clientMap.evmProvider, clientMap.bitcoinProvider])
+  }, [clientMap.bitcoinProvider, walletState.bitcoin.connected])
 
-  return null
+  useEffect(() => {
+    if (!walletState.cosmos.connected) {
+      return
+    }
+    const accountChanged = async () => {
+      await walletConnect.reloadAddress({ chainType: 'cosmos' })
+    }
+    clientMap.cosmosProvider?.on?.('accountChanged', accountChanged)
+    return () => {
+      clientMap.cosmosProvider?.off?.('accountChanged', accountChanged)
+    }
+  }, [clientMap.cosmosProvider, walletState.cosmos.connected])
 }
