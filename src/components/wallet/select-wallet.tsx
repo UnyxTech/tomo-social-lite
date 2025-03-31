@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { ChainType, tomoProviderSettingAtom } from '../../state'
 import classNames from 'classnames'
+import { getDeviceType } from '../../utils/utils'
 
 export default function SelectWallet({ chainType }: { chainType: ChainType }) {
   return <SelectWalletChildren type={'connect'} chainType={chainType} />
@@ -42,6 +43,7 @@ export function useWalletListWithIsInstall(chainType?: ChainType) {
   const getWalletList = () => {
     const list = getIndexWallets(tomoSetting)
     let isInjected = false
+    const isDesktop = getDeviceType() === 'desktop'
     return list
       .filter((wallet) => (chainType ? wallet.chainType === chainType : true))
       .map((wallet) => {
@@ -55,7 +57,7 @@ export function useWalletListWithIsInstall(chainType?: ChainType) {
           isInstall = false
         }
         wallet.isInstall = isInstall
-        if (wallet?.type === 'injected') {
+        if (wallet?.type === 'injected' && !isDesktop) {
           if (isInstall) {
             isInjected = true
           } else {
