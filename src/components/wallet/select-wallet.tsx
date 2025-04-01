@@ -67,7 +67,13 @@ export function useWalletListWithIsInstall(chainType?: ChainType) {
         return wallet
       })
       .filter((item) => {
-        return !!item && (!isInjected || item.type !== 'extension')
+        if (!item) {
+          return false
+        }
+        if (isDesktop) {
+          return item.isInstall || item.type !== 'injected'
+        }
+        return item.isInstall
       }) as TomoWallet[]
   }
   useEffect(() => {
