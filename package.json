@@ -21,7 +21,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@tomo-inc/tomo-wallet-provider": "1.1.12",
+    "@tomo-inc/tomo-wallet-provider": "1.1.13",
     "animate.css": "^4.1.1",
     "buffer": "^6.0.3",
     "classnames": "^2.5.1",

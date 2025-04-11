@@ -14,13 +14,16 @@ import '@tomo-inc/wallet-connect-sdk/style.css'
 import { ChainType, TomoProviderSetting } from '../state'
 import { CustomDemo } from './CustomDemo'
 import { bbnTestnet } from '../config/demo/bbn-test'
+// import { bbn1 } from '../config/demo/bbn1'
+
+const cosmosChain = bbnTestnet
 
 // window.injectedTomo = {
 //   info: {
 //     name: 'Tomo Inject xxx',
 //     logo: 'https://logincdn.msauth.net/16.000.30389.5/images/favicon.ico'
 //   },
-//   bitcoin: window.unisat,
+//   // bitcoin: window.unisat,
 //   cosmos: window.keplr
 // }
 
@@ -37,14 +40,14 @@ export default function Demo() {
       cosmosChains={[
         {
           id: 2,
-          name: bbnTestnet.chainName,
+          name: cosmosChain.chainName,
           type: 'cosmos' as ChainType,
-          network: bbnTestnet.chainId,
-          modularData: bbnTestnet,
+          network: cosmosChain.chainId,
+          modularData: cosmosChain,
           backendUrls: {
-            rpcUrl: bbnTestnet.rpc
+            rpcUrl: cosmosChain.rpc
           },
-          logo: bbnTestnet.chainSymbolImageUrl
+          logo: cosmosChain.chainSymbolImageUrl
         }
       ]}
     >
