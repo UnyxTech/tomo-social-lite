@@ -471,6 +471,14 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@keplr-wallet/proto-types@^0.12.216":
+  version "0.12.218"
+  resolved "https://registry.npmmirror.com/@keplr-wallet/proto-types/-/proto-types-0.12.218.tgz#61130cc652d646c95296bdf2b16e1c13bddefdd9"
+  integrity sha512-yJvd8XZqNNmNmiQslQqocr1qN41HPA8FEjGakLiyJ+VKzvGMH3UohPaPZA66nUGg4TjqaWfwjFqlblXvhZEpMg==
+  dependencies:
+    long "^4.0.0"
+    protobufjs "^6.11.2"
+
 "@keystonehq/alias-sampling@^0.1.1":
   version "0.1.2"
   resolved "https://registry.npmmirror.com/@keystonehq/alias-sampling/-/alias-sampling-0.1.2.tgz#63af931ffe6500aef4c0d87775a5b279189abf8d"
@@ -1087,11 +1095,12 @@
     "@testing-library/dom" "^9.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tomo-inc/tomo-wallet-provider@1.1.13":
-  version "1.1.13"
-  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.13.tgz#e3f84d6a5c78317d95b6f6dbe690ae6f31d05e6c"
-  integrity sha512-kZcNHRiNSF4DCHg6albShTUvZb6kLgkaPJWecDU3sURmPyXW2ynhL26B12rxxFsp1h4/wfs/kSogiDKWkmDw8A==
+"@tomo-inc/tomo-wallet-provider@1.1.14":
+  version "1.1.14"
+  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.14.tgz#c6ef2126890a58fe2e17989a3780c0f22b27b659"
+  integrity sha512-W0WwhL1WKjV3xRTYDRPk11NgeM3LB0HwJcAYpsK/1yQbMJgKj/aVg0LZOh4lMQVWNWdXHh5xmXzyGI8n1hpC9A==
   dependencies:
+    "@keplr-wallet/proto-types" "^0.12.216"
     buffer "^6.0.3"
     events "^3.3.0"
     jsontokens "^4.0.1"
@@ -3983,7 +3992,7 @@ prop-types@^15.7.2, prop-types@^15.8.1:
     object-assign "^4.1.1"
     react-is "^16.13.1"
 
-protobufjs@^6.8.8:
+protobufjs@^6.11.2, protobufjs@^6.8.8:
   version "6.11.4"
   resolved "https://registry.npmmirror.com/protobufjs/-/protobufjs-6.11.4.tgz#29a412c38bf70d89e537b6d02d904a6f448173aa"
   integrity sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==
