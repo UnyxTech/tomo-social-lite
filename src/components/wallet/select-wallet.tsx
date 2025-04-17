@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 import { ChainType, tomoProviderSettingAtom } from '../../state'
 import classNames from 'classnames'
 import { getDeviceType } from '../../utils/utils'
+import update from 'immutability-helper'
 
 export default function SelectWallet({ chainType }: { chainType: ChainType }) {
   return <SelectWalletChildren type={'connect'} chainType={chainType} />
@@ -18,7 +19,10 @@ export function useClickWallet() {
   const tomoSetting = useAtomValue(tomoProviderSettingAtom)
   return async (wallet: TomoWallet) => {
     try {
-      new wallet.connectProvider({ chains: [], ...tomoSetting.providerOptions })
+      await new wallet.connectProvider({
+        chains: [],
+        ...tomoSetting.providerOptions
+      }).init()
     } catch (e) {
       throw new Error('Wallet not installed')
     }
@@ -39,45 +43,63 @@ export function useWalletList(chainType?: ChainType) {
 
 export function useWalletListWithIsInstall(chainType?: ChainType) {
   const tomoSetting = useAtomValue(tomoProviderSettingAtom)
-  const [walletList, setWalletList] = useState<TomoWallet[]>()
-  const getWalletList = () => {
-    const list = getIndexWallets(tomoSetting)
+  const [allWalletWithInstall, setAllWalletWithInstall] = useState<
+    TomoWallet[]
+  >(() => {
+    return getIndexWallets(tomoSetting).map((wallet) => ({
+      ...wallet,
+      isInstall: false
+    })) as TomoWallet[]
+  })
+  // const [walletList, setWalletList] = useState<TomoWallet[]>()
+  const walletList = useMemo(() => {
     let isInjected = false
     const isDesktop = getDeviceType() === 'desktop'
-    return list
-      .filter((wallet) => (chainType ? wallet.chainType === chainType : true))
-      .map((wallet) => {
-        let isInstall = true
-        try {
-          new wallet.connectProvider({
-            chains: [],
-            ...tomoSetting.providerOptions
-          })
-        } catch (e) {
-          isInstall = false
-        }
-        wallet.isInstall = isInstall
-        if (wallet?.type === 'injected' && !isDesktop) {
-          if (isInstall) {
+    return allWalletWithInstall
+      .filter((wallet) => {
+        const isShow = chainType ? wallet.chainType === chainType : true
+        if (isShow && wallet.type === 'injected' && !isDesktop) {
+          if (wallet.isInstall) {
             isInjected = true
           } else {
-            return null
+            return false
           }
         }
-        return wallet
+        return isShow
       })
-      .filter((item) => {
-        if (!item) {
-          return false
-        }
+      .filter((wallet) => {
         if (isDesktop) {
-          return item.isInstall || item.type !== 'injected'
+          return wallet.isInstall || wallet.type !== 'injected'
         }
-        return item.isInstall || !isInjected
-      }) as TomoWallet[]
+        return wallet.isInstall || !isInjected
+      })
+  }, [allWalletWithInstall, chainType])
+  const reloadWalletList = async () => {
+    allWalletWithInstall
+      .filter((wallet) => (chainType ? wallet.chainType === chainType : true))
+      .forEach(async (wallet) => {
+        if (wallet.isInstall) {
+          return
+        }
+        try {
+          await new wallet.connectProvider({
+            chains: [],
+            ...tomoSetting.providerOptions
+          }).init()
+          setAllWalletWithInstall((prev) => {
+            return update(prev, {
+              [prev.findIndex((w) => wallet.id === w.id)]: {
+                isInstall: { $set: true }
+              }
+            })
+          })
+        } catch (e) {
+          //
+        }
+      })
   }
   useEffect(() => {
-    setWalletList(getWalletList())
+    reloadWalletList()
   }, [tomoSetting, chainType])
   return walletList
 }

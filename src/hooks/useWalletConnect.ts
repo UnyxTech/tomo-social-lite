@@ -180,7 +180,7 @@ export default function useWalletConnect() {
   )
 
   const initProvider = useAtomCallback(
-    useCallback((get, set, walletId: string) => {
+    useCallback(async (get, set, walletId: string) => {
       const tomoProviderSetting = get(tomoProviderSettingAtom)
       const newClientMap = {} as ClientMap
 
@@ -198,7 +198,7 @@ export default function useWalletConnect() {
             ...tomoProviderSetting.providerOptions
           }
         ))
-
+      await provider.init()
       setClientMap((prev) => {
         return {
           ...prev,
@@ -237,7 +237,7 @@ export default function useWalletConnect() {
               }
             })
           })
-          initProvider(walletId)
+          await initProvider(walletId)
           await switchChainType(wallet.chainType)
           setWalletState((prev: WalletState) => {
             return update(prev, {
@@ -366,23 +366,23 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
 
       // init wallet state
       const walletState = get(walletStateAtom)
-      tomoSetting.chainTypes?.forEach((chainType) => {
-        const walletId = walletState[chainType].walletId
-        if (walletId) {
-          const wallet = getWalletById(walletId, tomoSetting)
-          if (wallet) {
-            try {
-              // @ts-ignore
-              new wallet.connectProvider({
-                chains: tomoSetting[`${chainType}Chains`],
-                ...tomoSetting.providerOptions
-              })
-            } catch (e) {
-              /* empty */
-            }
-          }
-        }
-      })
+      // tomoSetting.chainTypes?.forEach((chainType) => {
+      //   const walletId = walletState[chainType].walletId
+      //   if (walletId) {
+      //     const wallet = getWalletById(walletId, tomoSetting)
+      //     if (wallet) {
+      //       try {
+      //         // @ts-ignore
+      //         new wallet.connectProvider({
+      //           chains: tomoSetting[`${chainType}Chains`],
+      //           ...tomoSetting.providerOptions
+      //         })
+      //       } catch (e) {
+      //         /* empty */
+      //       }
+      //     }
+      //   }
+      // })
       if (walletState.isConnected && tomoSetting.autoReconnect !== false) {
         try {
           if (
@@ -396,7 +396,7 @@ export function useWalletConnectInit(opt: TomoProviderSetting) {
 
           for (const type of connectChainTypes) {
             const walletId = walletState[type].walletId!
-            walletConnect.initProvider(walletId)
+            await walletConnect.initProvider(walletId)
             await walletConnect.switchChainType(type, {
               type: 'init'
             })

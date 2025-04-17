@@ -479,6 +479,22 @@
     long "^4.0.0"
     protobufjs "^6.11.2"
 
+"@keplr-wallet/provider-extension@^0.12.220":
+  version "0.12.220"
+  resolved "https://registry.npmmirror.com/@keplr-wallet/provider-extension/-/provider-extension-0.12.220.tgz#024c738b47e08f44171adbd6415999fe8c81e028"
+  integrity sha512-TeHFUQVv/mwqJwDneRYLWpbrBzO1tFTmAEAxWCOIHPk8zDW/eyLybTSCRZidPLuNAwKdKH4YlrndEtSdkPLWbQ==
+  dependencies:
+    "@keplr-wallet/types" "0.12.220"
+    deepmerge "^4.2.2"
+    long "^4.0.0"
+
+"@keplr-wallet/types@0.12.220":
+  version "0.12.220"
+  resolved "https://registry.npmmirror.com/@keplr-wallet/types/-/types-0.12.220.tgz#45fd906ab0dbc7db753d72edca8d3af16411dbe8"
+  integrity sha512-vQkun9eeGriMR9+eCdWmynWG6yre0DreBP6axRT8hruTYnVEVDVjRTD5A6WYyTA6Qj8Yb0yzrka3LuRMfgG15g==
+  dependencies:
+    long "^4.0.0"
+
 "@keystonehq/alias-sampling@^0.1.1":
   version "0.1.2"
   resolved "https://registry.npmmirror.com/@keystonehq/alias-sampling/-/alias-sampling-0.1.2.tgz#63af931ffe6500aef4c0d87775a5b279189abf8d"
@@ -1095,12 +1111,13 @@
     "@testing-library/dom" "^9.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tomo-inc/tomo-wallet-provider@1.1.14":
-  version "1.1.14"
-  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.14.tgz#c6ef2126890a58fe2e17989a3780c0f22b27b659"
-  integrity sha512-W0WwhL1WKjV3xRTYDRPk11NgeM3LB0HwJcAYpsK/1yQbMJgKj/aVg0LZOh4lMQVWNWdXHh5xmXzyGI8n1hpC9A==
+"@tomo-inc/tomo-wallet-provider@1.1.15":
+  version "1.1.15"
+  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.15.tgz#e2e026ab98c2c07fb4a0fb9b2b70dc39b522fa39"
+  integrity sha512-AYP2blreFo9FekALYKr2HYqHyHhMevmK6o3Rg2/gm0zRt0l2VHb4DdT11ZK1iKu0fhNpDqp+osOjyU0z6Imu2A==
   dependencies:
     "@keplr-wallet/proto-types" "^0.12.216"
+    "@keplr-wallet/provider-extension" "^0.12.220"
     buffer "^6.0.3"
     events "^3.3.0"
     jsontokens "^4.0.1"
@@ -2062,6 +2079,11 @@ deep-is@^0.1.3:
   version "0.1.4"
   resolved "https://registry.npmmirror.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
   integrity sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
+
+deepmerge@^4.2.2:
+  version "4.3.1"
+  resolved "https://registry.npmmirror.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
+  integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
 
 define-data-property@^1.0.1, define-data-property@^1.1.4:
   version "1.1.4"
