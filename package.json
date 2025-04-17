@@ -29,6 +29,7 @@
     "immutability-helper": "^3.1.1",
     "jotai": "^2.9.0",
     "long": "^5.2.3",
+    "starknet": "^6.24.1",
     "tailwind-merge": "2.2.2"
   },
   "peerDependencies": {
@@ -42,7 +43,6 @@
     "@keystonehq/animated-qr": "0.10.0",
     "@keystonehq/keystone-sdk": "0.9.0",
     "@keystonehq/sdk": "0.22.1",
-    "bitcoinjs-lib": "^6.1.5",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-typescript": "^8.2.1",
@@ -59,6 +59,7 @@
     "@vitest/ui": "^1.6.0",
     "autoprefixer": "^10.4.19",
     "bignumber.js": "^9.1.2",
+    "bitcoinjs-lib": "^6.1.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
