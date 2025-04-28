@@ -1119,10 +1119,10 @@
     "@testing-library/dom" "^9.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tomo-inc/tomo-wallet-provider@1.1.15":
-  version "1.1.15"
-  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.15.tgz#e2e026ab98c2c07fb4a0fb9b2b70dc39b522fa39"
-  integrity sha512-AYP2blreFo9FekALYKr2HYqHyHhMevmK6o3Rg2/gm0zRt0l2VHb4DdT11ZK1iKu0fhNpDqp+osOjyU0z6Imu2A==
+"@tomo-inc/tomo-wallet-provider@1.1.16":
+  version "1.1.16"
+  resolved "https://registry.npmmirror.com/@tomo-inc/tomo-wallet-provider/-/tomo-wallet-provider-1.1.16.tgz#34fa7d82911e0e6223586d8555733888436d6016"
+  integrity sha512-Y7VAED31OAV6vWl6/rsOw9x1EEeuTEMpZnF2skDGHQbYV+Oj59zb8rH3CeB41a86hAb3GAmR63avQae6OlkkRg==
   dependencies:
     "@keplr-wallet/proto-types" "^0.12.216"
     "@keplr-wallet/provider-extension" "^0.12.220"
