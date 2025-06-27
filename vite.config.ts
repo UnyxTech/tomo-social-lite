@@ -66,14 +66,32 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         external: [
           'react',
+          /^react\/.*/,
           'react-dom',
           '@tanstack/react-query',
           'classnames',
           'ethereum-qr-code',
           '@tomo-inc/social-wallet-sdk',
           'viem',
+          '@bitcoinerlab/secp256k1',
           '@cosmjs/stargate',
-          '@tomo-inc/tomo-wallet-provider'
+          '@keystonehq/animated-qr',
+          '@keystonehq/keystone-sdk',
+          '@keystonehq/sdk',
+          '@scure/bip32',
+          'bitcoinjs-lib',
+          /^bitcoinjs-lib\/.*/,
+          'libsodium-sumo',
+          'elliptic',
+          'libsodium-wrappers-sumo',
+          'bn.js',
+          /^@cosmjs\/.*/,
+          /^@keplr-wallet\/.*/,
+          'jsontokens',
+          'protobufjs/src',
+          '@protobufjs',
+          'long',
+          'buffer'
         ],
         plugins: [
           // inject({
